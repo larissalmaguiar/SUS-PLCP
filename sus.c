@@ -3,7 +3,7 @@
 
 
 #define lcp(i) ((i < n) ? (LCP[i]) : (0))
-#define PHI(i) ((ISA[i]<n-1) ? (phi[i]) : (i))
+
 
 
 bool iguais(int *v1, int *v2, int tam) 
