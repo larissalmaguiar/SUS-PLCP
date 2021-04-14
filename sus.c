@@ -6,12 +6,12 @@
 #define PHI(i) ((ISA[i]<n-1) ? (phi[i]) : (i))
 
 
-bool iguais(int *v1, int *v2, int *v3, int tam) 
+bool iguais(int *v1, int *v2, int tam) 
 {
     int i;
     for(i=0; i < tam; i++) 
     {
-        if (v1[i] != v2[i] || v1[i]!=v3[i] || v2[i]!=v3[i]) 
+        if (v1[i] != v2[i]) 
         {
             printf("Os vetores não são iguais na posição: %d :(\n", i);
             return false;
@@ -22,13 +22,15 @@ bool iguais(int *v1, int *v2, int *v3, int tam)
 }
 void inicializacao (int *SUS1, int *SUS, int *ISA, int *phi, uint_t SA[], int n)
 {
+    SA[n]=n;
+    ISA[n]=n;
     for (int i = 0; i < n; i++)
     {
         SUS[i] = 0;
         SUS1[i] = 0;
         ISA[SA[i]] = i;
     }
-    for (int i = 0; i < n; i++)
+    for (int i = 0; i <=n; i++)
     {
         if (ISA[i] != 0)
             phi[i] = SA[ISA[i] - 1];
@@ -94,11 +96,6 @@ void SUS_1(int *SUS, int phi[], int n, int PLCP[], int ISA[])
             if (n - k - 1 >= cur)
                 SUS[k] = cur;
         }
-        if(ISA[i]==n-1)
-        {
-             cur = PLCP[i] + 1;
-            if (n - i - 1 >= cur)
-                SUS[i] = cur;
-        }
+        
     }
 }
