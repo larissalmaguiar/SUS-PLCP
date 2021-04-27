@@ -18,10 +18,11 @@
 
 
 
-bool iguais(int *v1, int *v2, int tam);
-void inicializacao (int *SUS1, int *SUS, int *ISA, int *phi, uint_t SA[], int n);
-void construcaoPLCP(int *PLCP, int phi[], char Text[], int n, int *SUS2);
-void SUS_tradicional(int *SUS, uint_t SA[], int n, int_t LCP[]);
-void SUS_1(int *SUS, int phi[], int n, int PLCP[], int ISA[]);
-void SUS_2(int *SUS2, int phi[], int n, int PLCP[]);
+bool equal(int *v1, int *v2, int tam);
+void initialize(int *SUS, int *SUS1, int *ISA, int *phi, uint_t SA[], int n);
+void buildPLCP(int *PLCP, int *phi, char *Text, int n);
+void SUS_T(int *SUS, int n, int_t *LCP, uint_t *SA);
+void SUS_1(int *SUS, int *PHI, int n, int *PLCP);
+void SUS_2(int *SUS2, int n, int *PLCP, int *phi);
+void print(uint_t *SA, int *SUS, char *Text, int n);
 #endif
