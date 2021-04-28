@@ -23,7 +23,7 @@ Text = GCTCTCAAAATAAAGTACGGA$
 
 Print SUS?
  1-Yes 2- No: 1
- i	SA	SUS	suffixes
+i	SA	SUS	suffixes
 0	21	0	$
 1	20	0	A$
 2	6	4	AAAATAAAGTACGGA$
