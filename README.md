@@ -1,5 +1,5 @@
 # SUS
-SUS is vector with the length of all shortest unique substring that begin in i. In this algorithm there are, beyond the traditional way, other ways of building it. 
+SUS is an array that stores the length of all Shortest Unique Substring that begin in index i of a string. In this algorithm there are, beyond the traditional way, other ways of building SUS. 
 ## Build requirements
 
 An ANSI C Compiler (e.g. GNU GCC)
