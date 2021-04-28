@@ -36,7 +36,7 @@ void initialize(int *SUS, int *SUS1, int *ISA, int *phi, uint_t *SA, int n)
     }
 }
 
-void buildPLCP(int *PLCP, int *phi, char *Text, int n)
+void buildPLCP(int *PLCP, int *phi, char *Text, int n, int *SUS)
 {
     int l = 0, k = 0;
     for (int i = 0; i <= n; i++)
@@ -49,6 +49,7 @@ void buildPLCP(int *PLCP, int *phi, char *Text, int n)
                 l++;
             }
             PLCP[i] = l;
+            SUS[k]=PLCP[i];
             l = max((l - 1), 0);
         }
         else
@@ -59,10 +60,6 @@ void buildPLCP(int *PLCP, int *phi, char *Text, int n)
 void SUS_2(int *SUS2, int n, int *PLCP, int *phi)
 {
     int cur;
-    for(int i=0; i<n; i++)
-    {
-        if(phi[i]!=n) SUS2[phi[i]] = PLCP[i];
-    }
     for (int i = 0; i < n; i++)
     {
         cur = max(PLCP[i], SUS2[i]) + 1;
