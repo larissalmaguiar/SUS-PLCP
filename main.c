@@ -1,106 +1,119 @@
 
+//================================
+//BIBLIOTECAS
+//================================
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <stdbool.h>
+
+//================================
+//TADS
+//================================
+#include "sacak-lcp.h"
 #include "sus.h"
+
 
 #define lcp(i) ((i < n) ? (LCP[i]) : (0))
 
-bool equal(int *v1, int *v2, int tam)
-{
-    int i;
-    for (i = 0; i < tam; i++)
-    {
-        if (v1[i] != v2[i])
-        {
-            printf("SUS and SUST are different in %d :(\n", i);
-            return false;
-        }
-    }
 
-    return true;
-}
-void initialize(int *SUS, int *SUS1, int *ISA, int *phi, uint_t *SA, int n)
-{
-    SA[n] = n;
-    ISA[n] = n;
-    for (int i = 0; i < n; i++)
-    {
-        SUS[i] = 0;
-        SUS1[i] = 0;
-        ISA[SA[i]] = i;
-    }
-    for (int i = 0; i <= n; i++)
-    {
-        if (ISA[i] != 0)
-            phi[i] = SA[ISA[i] - 1];
-        else
-            phi[i] = n;
-    }
-}
 
-void buildPLCP(int *PLCP, int *phi, char *Text, int n, int *SUS)
+int main(int argc, char *argv[])
 {
-    int l = 0, k = 0;
-    for (int i = 0; i <= n; i++)
+    //================================
+    //ENTRADA
+    //================================
+    FILE *ent;
+    ent = fopen(argv[1], "r");
+    fseek(ent, 0, SEEK_END);
+    int n = ftell(ent);
+    rewind(ent);
+    char *Text = (char *)malloc((n) * sizeof(char));
+    char *line= malloc(n);
+    while (fgets(line, n, ent) !=NULL)
     {
-        k = phi[i];
-        if (k != n)
-        {
-            while (Text[k + l] == Text[i + l])
-            {
-                l++;
-            }
-            PLCP[i] = l;
-            SUS[k]=PLCP[i];
-            l = max((l - 1), 0);
+       if(line[0]!='>')
+       {
+           int tam=strlen(line);
+           line[tam-1]='\0';
+           strcat(Text, line);
+       }
+    }
+    n=strlen(Text)+1;
+    //================================
+    //DECLARAÇÃO DE VETORES
+    //================================
+    uint_t *SA = (uint_t *)malloc((n+1) * sizeof(uint_t));
+    int_t *LCP = (int_t *)malloc((n+1) * sizeof(int_t));
+    int *ISA = (int *)malloc((n+1) * sizeof(int));
+    int *PHI = (int *)malloc((n+1) * sizeof(int));
+    int *PLCP = (int *)malloc((n+1) * sizeof(int));
+    int *SUS = (int *)malloc((n) * sizeof(int));
+    int *SUS1 = (int *)malloc((n) * sizeof(int));
+    int *SUS2 = (int *)malloc((n) * sizeof(int));
+    printf("Text = %s$\n\n", Text);
+    //================================
+    //CONSTRUÇÃO DO SA E LCP
+    //================================
+    sacak_lcp((unsigned char *)Text, (uint_t *)SA, LCP, n);
+    //================================
+    //INICIALIZAÇÃO E CONSTRUÇÃO 
+    //================================
+    initialize(SUS1, SUS, ISA, PHI, SA, n);
+    buildPLCP(PLCP, PHI, Text, n, SUS2);
+    //================================
+    //SUS TRADICIONAL 
+    //================================
+    int opt=atoi(argv[2]);
+    switch (opt)
+    {
+        case 0:
+            SUS_T(SUS, n, LCP, SA);
+        break;
+        case 1:
+            SUS_1(SUS1, PHI, n, PLCP);
+        break;
+        case 2:
+            SUS_2(SUS2, n, PLCP, PHI);
+        break;
+
+    }
+    int op;
+    printf("compare SUS with SUST?\n 1-Yes 2- No: ");
+    scanf("%d",&op);
+    if(op==1)
+    {
+        SUS_T(SUS, n, LCP, SA);
+        if(opt==2){
+            if (equal(SUS,SUS2, n)) printf("SUS and SUST are equal :)\n");
         }
-        else
-            PLCP[i] = 0;
+        else 
+            if(equal(SUS,SUS1, n)) printf("SUS and SUST are equal :)\n");
     }
-    PLCP[n] = 0;
-}
-void SUS_2(int *SUS2, int n, int *PLCP, int *phi)
-{
-    int cur;
-    for (int i = 0; i < n; i++)
+    printf("Print SUS?\n 1-Yes 2- No: ");
+    scanf("%d",&op);
+    if(op==1)
     {
-        cur = max(PLCP[i], SUS2[i]) + 1;
-        if (n - i - 1 >= cur)
-        {
-            SUS2[i] = cur;
-        }
-        else
-            SUS2[i] = 0;
+        if(opt==2)
+            print(SA, SUS2, Text, n);
+        else if(opt==1)
+           print(SA, SUS1, Text, n);
+        else if(opt==0)
+             print(SA, SUS, Text, n);
     }
-}
-void SUS_T(int *SUS, int n, int_t *LCP, uint_t *SA)
-{
-    for (int i = 1; i < n; i++)
-    {
-        int cur = 1 + max(lcp(i), lcp(i + 1));
-        if (n - SA[i] - 1 >= cur)
-            SUS[SA[i]] = cur;
-    }
-}
-void SUS_1(int *SUS, int *PHI, int n, int *PLCP)
-{
-    int k, cur;
-    for (int i = 0; i <= n; i++)
-    {
-        k = PHI[i];
-        cur = 1 + max(PLCP[i], PLCP[k]);
-        if (n - k - 1 >= cur)
-            SUS[k] = cur;
-    }
-}
-void print(uint_t *SA, int *SUS, char *Text, int n)
-{
-    printf("i\tSA\tSUS\tsuffixes\n");
-    for (int i = 0; i < n; ++i)
-    {
-        printf("%d\t%d\t%d\t", i, SA[i], SUS[SA[i]]);
-        for (int j = SA[i]; j < n; ++j)
-        {
-            printf("%c", Text[j]);
-        }
-        printf("$\n");
-    }
+    //================================
+    //LIBERAÇÃO DOS VETORES
+    //================================
+    free(SA);
+    free(LCP);
+    free(SUS);
+    free(SUS1);
+    free(SUS2);
+    free(ISA);
+    free(PHI);
+    free(PLCP);
+    fclose(ent);
+    free(Text);
+    free(line);
+    return 0;
 }
