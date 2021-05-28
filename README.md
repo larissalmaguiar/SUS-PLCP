@@ -13,7 +13,7 @@ make
 **Run a test:**
 
 ```c
-./main teste1.txt 0
+./main teste1.txt -1 -p -c -t
 ```
 
 **Output:**
@@ -21,8 +21,8 @@ make
 ```c
 Text = GCTCTCAAAATAAAGTACGGA$
 
-Print SUS?
- 1-Yes 2- No: 1
+SUS and SUST are equal :)
+
 i	SA	SUS	suffixes
 0	21	0	$
 1	20	0	A$
@@ -46,6 +46,7 @@ i	SA	SUS	suffixes
 19	15	3	TACGGA$
 20	4	3	TCAAAATAAAGTACGGA$
 21	2	3	TCTCAAAATAAAGTACGGA$
+run time: 0.0000000000 seconds
 
 
 ```
