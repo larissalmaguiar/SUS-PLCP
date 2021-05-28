@@ -6,7 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-
+#include <time.h>
+#include <unistd.h>
 //================================
 //TADS
 //================================
@@ -48,6 +49,7 @@ int main(int argc, char *argv[])
     int *SUS = (int *)malloc((n) * sizeof(int));
     int *SUS1 = (int *)malloc((n) * sizeof(int));
     int *SUS2 = (int *)malloc((n) * sizeof(int));
+    int *SUS3 = (int *)malloc((n) * sizeof(int));
     printf("Text = %s$\n\n", Text);
     //================================
     //CONSTRUÇÃO DO SA E LCP
@@ -56,53 +58,93 @@ int main(int argc, char *argv[])
     //================================
     //INICIALIZAÇÃO E CONSTRUÇÃO
     //================================
-    initialize(SUS1, SUS, ISA, PHI, SA, n);
-    buildPLCP(PLCP, PHI, Text, n, SUS2);
+    time_t t_start = 0, t_end = 0;
+    //clock_t c_start=0;
     //================================
-    //SUS TRADICIONAL
+    //ESCOLHA DE SUS
     //================================
-    int opt = atoi(argv[2]);
-    switch (opt)
+    int c, type = 0, comp = 0, pri = 0, t=0;
+    while ((c = getopt(argc, argv, "0123pct")) != -1)
+    {
+        switch (c)
+        {
+        case '0':
+            type=0;
+            break;
+         case '1':
+            type=1;
+            break;
+         case '2':
+            type=2;
+            break;
+         case '3':
+            type=3;
+            break;
+        case 'p':
+            pri = 1;
+            break;
+        case 'c':
+            comp = 1;
+            break;
+        case 't':
+            t=1;
+            break;
+        default:
+            break;
+        }
+    }
+    switch (type)
     {
     case 0:
+        t_start = time(NULL);
         SUS_T(SUS, n, LCP, SA);
+        t_end = time(NULL);
         break;
     case 1:
-        SUS_1(SUS1, PHI, n, PLCP);
+        t_start = time(NULL);
+        SUS_1(SUS1, PHI, n, PLCP, Text, ISA, SA);
+        t_end = time(NULL);
         break;
     case 2:
-        SUS_2(SUS2, n, PLCP, PHI);
+        t_start = time(NULL);
+        SUS_2(SUS2, n, PLCP, PHI, ISA, Text, SA);
+        t_end = time(NULL);
+        break;
+    case 3:
+        t_start = time(NULL);
+        PLCPSUS(PLCP, PHI, Text, n, ISA, SA, SUS3);
+        t_end = time(NULL);
         break;
     default:
         break;
     }
-    int op;
-    if (opt != 0)
+    if (type != 0)
     {
-        printf("compare SUS with SUST?\n 1-Yes 2- No: ");
-        scanf("%d", &op);
-        if (op == 1)
+        if (comp == 1)
         {
             SUS_T(SUS, n, LCP, SA);
-            switch (opt)
+            switch (type)
             {
-                case 1:
-                    if (equal(SUS, SUS1, n)) printf("SUS and SUST are equal :)\n");
-                    break;
-                case 2:
-                    if (equal(SUS, SUS2, n)) printf("SUS and SUST are equal :)\n");
-                    break;
-
-                default:
-                    break;
+            case 1:
+                if (equal(SUS, SUS1, n))
+                    printf("SUS and SUST are equal :)\n");
+                break;
+            case 2:
+                if (equal(SUS, SUS2, n))
+                    printf("SUS and SUST are equal :)\n");
+                break;
+            case 3:
+                if (equal(SUS, SUS3, n))
+                    printf("SUS and SUST are equal :)\n");
+                break;
+            default:
+                break;
             }
         }
     }
-    printf("Print SUS?\n 1-Yes 2- No: ");
-    scanf("%d", &op);
-    if (op == 1)
+    if (pri == 1)
     {
-        switch (opt)
+        switch (type)
         {
         case 0:
             print(SA, SUS, Text, n);
@@ -113,10 +155,15 @@ int main(int argc, char *argv[])
         case 2:
             print(SA, SUS2, Text, n);
             break;
+        case 3:
+            print(SA, SUS3, Text, n);
+            break;
         default:
             break;
         }
     }
+    if(t==1)
+        printf("run time: %.10lf seconds\n", difftime(t_end, t_start));
     //================================
     //LIBERAÇÃO DOS VETORES
     //================================
