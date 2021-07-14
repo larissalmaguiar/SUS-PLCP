@@ -19,7 +19,8 @@
 
 
 bool equal(int *v1, int *v2, int tam);
-//void initialize(int *SUS, int *SUS1, int *ISA, int *phi, uint_t *SA, int n);
+void time_start(time_t *t_time, clock_t *c_clock);
+double time_stop(time_t t_time, clock_t c_clock);
 void buildPLCP(int *PLCP, int *PHI, char *Text, int n, int *ISA, uint_t *SA);
 void SUS_T(int *SUS, int n, int_t *LCP, uint_t *SA);
 void SUS_1(int *SUS, int *PHI, int n, int *PLCP, char *Text, int *ISA, uint_t *SA);
@@ -28,4 +29,6 @@ void isa(int *ISA, int n, uint_t *SA);
 void phi (int *PHI, int n, int *ISA, uint_t *SA);
 void print(uint_t *SA, int *SUS, char *Text, int n);
 void PLCPSUS(int *PLCP, int *PHI, char *Text, int n, int *ISA, uint_t *SA, int *SUS);
+void SUS_C(int *ISA, uint_t *SA, int_t *LCP, int n);
+void sus_cr (int_t *LCP, int *ISA, int n, int k);
 #endif
