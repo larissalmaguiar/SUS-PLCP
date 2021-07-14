@@ -19,13 +19,16 @@
 int main(int argc, char *argv[])
 {
     //================================
-    //ENTRADA
+    //LEITURA DO ARQUIVO
     //================================
     FILE *ent;
     ent = fopen(argv[1], "r");
     fseek(ent, 0, SEEK_END);
     int n = ftell(ent);
     rewind(ent);
+    //================================
+    //TRATAMENTO DE ARQUIVO FASTA
+    //================================
     char *Text = (char *)malloc((n) * sizeof(char));
     char *line = malloc(n);
     while (fgets(line, n, ent) != NULL)
@@ -35,7 +38,7 @@ int main(int argc, char *argv[])
             int tam = strlen(line);
             line[tam - 1] = '\0';
             strcat(Text, line);
-        }
+       }
     }
     n = strlen(Text) + 1;
     //================================
@@ -58,13 +61,14 @@ int main(int argc, char *argv[])
     //================================
     //INICIALIZAÇÃO E CONSTRUÇÃO
     //================================
-    time_t t_start = 0, t_end = 0;
-    //clock_t c_start=0;
+        time_t t_start=0;
+        clock_t c_start=0;
+        double time=0.0;
     //================================
     //ESCOLHA DE SUS
     //================================
     int c, type = 0, comp = 0, pri = 0, t=0;
-    while ((c = getopt(argc, argv, "0123pct")) != -1)
+    while ((c = getopt(argc, argv, "0123kpct")) != -1)
     {
         switch (c)
         {
@@ -79,6 +83,9 @@ int main(int argc, char *argv[])
             break;
          case '3':
             type=3;
+            break;
+        case'k':
+            type=4;
             break;
         case 'p':
             pri = 1;
@@ -96,29 +103,31 @@ int main(int argc, char *argv[])
     switch (type)
     {
     case 0:
-        t_start = time(NULL);
+        time_start(&t_start, &c_start);
         SUS_T(SUS, n, LCP, SA);
-        t_end = time(NULL);
+        time = time_stop(t_start, c_start);
         break;
     case 1:
-        t_start = time(NULL);
+        time_start(&t_start, &c_start);
         SUS_1(SUS1, PHI, n, PLCP, Text, ISA, SA);
-        t_end = time(NULL);
+        time =time_stop(t_start, c_start);
         break;
     case 2:
-        t_start = time(NULL);
+        time_start(&t_start, &c_start);
         SUS_2(SUS2, n, PLCP, PHI, ISA, Text, SA);
-        t_end = time(NULL);
+        time = time_stop(t_start, c_start);
         break;
     case 3:
-        t_start = time(NULL);
+        time_start(&t_start, &c_start);
         PLCPSUS(PLCP, PHI, Text, n, ISA, SA, SUS3);
-        t_end = time(NULL);
+        time = time_stop(t_start, c_start);
         break;
+    case 4:
+        SUS_C(ISA, SA, LCP, n);
     default:
         break;
     }
-    if (type != 0)
+    if (type != 0 && type!=4)
     {
         if (comp == 1)
         {
@@ -142,7 +151,7 @@ int main(int argc, char *argv[])
             }
         }
     }
-    if (pri == 1)
+    if (pri == 1 && type!=4)
     {
         switch (type)
         {
@@ -162,8 +171,8 @@ int main(int argc, char *argv[])
             break;
         }
     }
-    if(t==1)
-        printf("run time: %.10lf seconds\n", difftime(t_end, t_start));
+    if(t==1 && type!=4)
+        printf("TIME: %.15lf\n", time);
     //================================
     //LIBERAÇÃO DOS VETORES
     //================================
