@@ -123,7 +123,7 @@ int main(int argc, char *argv[])
         time = time_stop(t_start, c_start);
         break;
     case 4:
-        SUS_C(ISA, SA, LCP, n);
+        SUS_C(ISA, SA, LCP, n, Text);
     default:
         break;
     }
