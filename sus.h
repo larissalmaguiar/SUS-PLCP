@@ -29,6 +29,6 @@ void isa(int *ISA, int n, uint_t *SA);
 void phi (int *PHI, int n, int *ISA, uint_t *SA);
 void print(uint_t *SA, int *SUS, char *Text, int n);
 void PLCPSUS(int *PLCP, int *PHI, char *Text, int n, int *ISA, uint_t *SA, int *SUS);
-void SUS_C(int *ISA, uint_t *SA, int_t *LCP, int n);
-void sus_cr (int_t *LCP, int *ISA, int n, int k);
+void SUS_C(int *ISA, uint_t *SA, int_t *LCP, int n, char *Text);
+void sus_cr (int_t *LCP, int *ISA, int n, int k, char *Text);
 #endif
