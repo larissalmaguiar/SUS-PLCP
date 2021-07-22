@@ -166,7 +166,7 @@ void SUS_1(int *SUS, int *PHI, int n, int *PLCP, char *Text, int *ISA, uint_t *S
             SUS[k] = cur;
     }
 }
-void sus_cr (int_t *LCP, int *ISA, int n, int k)
+void sus_cr (int_t *LCP, int *ISA, int n, int k, char *Text)
 {
     int  tam=n, L=0;
     for(int i=0; i<=k; i++)
@@ -183,14 +183,22 @@ void sus_cr (int_t *LCP, int *ISA, int n, int k)
     {
         L=max(LCP[ISA[i]], LCP[ISA[i]+1]);
         if(i+L<n-1)
-            if(max(L+1, k-i+1)==tam) printf("Begin: %d\n", i);
+        {
+            if(max(L+1, k-i+1)==tam)
+            {
+                char sp[n];
+                strcpy(sp, Text+i);
+                sp[tam]='\0';
+                printf("%s\n", sp);
+            }
+        }
     }
 }
-void SUS_C(int *ISA,uint_t *SA, int_t *LCP, int n)
+void SUS_C(int *ISA,uint_t *SA, int_t *LCP, int n, char *Text)
 {
     isa(ISA, n, SA);
     for(int i=0; i<n-1; i++)
     {
-        sus_cr (LCP, ISA, n, i);
+        sus_cr (LCP, ISA, n, i, Text);
     }
 }
