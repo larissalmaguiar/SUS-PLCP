@@ -1,5 +1,6 @@
 # ignore objects and archives, anywhere in the tree.
-*.[oa]
+external/*.[oa]
+lib/*.[oa]
 *main-sus
 *.swp
 *.swo
