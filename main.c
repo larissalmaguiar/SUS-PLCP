@@ -1,4 +1,4 @@
-
+#define DEBUG 0
 //================================
 //BIBLIOTECAS
 //================================
@@ -11,8 +11,9 @@
 //================================
 //TADS
 //================================
-#include "sacak-lcp.h"
-#include "sus.h"
+#include "external/sacak-lcp.h"
+#include "lib/sus.h"
+#include "external/malloc_count/malloc_count.h"  
 
 #define lcp(i) ((i < n) ? (LCP[i]) : (0))
 
@@ -53,7 +54,9 @@ int main(int argc, char *argv[])
     int *SUS1 = (int *)malloc((n) * sizeof(int));
     int *SUS2 = (int *)malloc((n) * sizeof(int));
     int *SUS3 = (int *)malloc((n) * sizeof(int));
-    printf("Text = %s$\n\n", Text);
+    #if DEBUG
+      printf("Text = %s$\n\n", Text);
+    #endif
     //================================
     //CONSTRUÇÃO DO SA E LCP
     //================================
