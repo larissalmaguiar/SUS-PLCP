@@ -9,6 +9,17 @@ void time_start(time_t *t_time, clock_t *c_clock)
 	*t_time = time(NULL);
 	*c_clock =  clock();
 }
+
+double time_stop(time_t t_time, clock_t c_clock){
+
+	double aux1 = (clock() - c_clock) / (double)(CLOCKS_PER_SEC);
+	double aux2 = difftime (time(NULL),t_time);
+	
+	printf("CLOCK = %lf TIME = %lf\n", aux1, aux2);
+
+	return aux2;
+}
+
 void print(uint_t *SA, int *SUS, char *Text, int n)
 {
     printf("i\tSA\tSUS\tSuffixies\n");
@@ -23,15 +34,6 @@ void print(uint_t *SA, int *SUS, char *Text, int n)
     }
 }
 
-double time_stop(time_t t_time, clock_t c_clock)
-{
-
-	//double aux1 = (clock() - c_clock) / (double)(CLOCKS_PER_SEC);
-	double aux2 = difftime (time(NULL),t_time);
-	
-	//printf("CLOCK = %lf TIME = %.15lf\n", aux1, aux2);
-	return aux2;
-}
 
 bool equal(int *v1, int *v2, int tam)
 {

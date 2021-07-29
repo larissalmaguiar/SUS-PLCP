@@ -64,31 +64,18 @@ int main(int argc, char *argv[])
     //================================
     //INICIALIZAÇÃO E CONSTRUÇÃO
     //================================
-        time_t t_start=0;
-        clock_t c_start=0;
-        double time=0.0;
+    time_t t_start=0;
+    clock_t c_start=0;
     //================================
     //ESCOLHA DE SUS
     //================================
-    int c, type = 0, comp = 0, pri = 0, t=0;
-    while ((c = getopt(argc, argv, "0123kpct")) != -1)
+    int c, alg = 0, comp = 0, pri = 0, time=0;
+    while ((c = getopt(argc, argv, "A:kpct")) != -1)
     {
         switch (c)
         {
-        case '0':
-            type=0;
-            break;
-         case '1':
-            type=1;
-            break;
-         case '2':
-            type=2;
-            break;
-         case '3':
-            type=3;
-            break;
-        case'k':
-            type=4;
+        case 'A':
+            alg=(int)atoi(optarg);
             break;
         case 'p':
             pri = 1;
@@ -97,45 +84,40 @@ int main(int argc, char *argv[])
             comp = 1;
             break;
         case 't':
-            t=1;
+            time=1;
             break;
         default:
             break;
         }
     }
-    switch (type)
-    {
-    case 0:
-        time_start(&t_start, &c_start);
-        SUS_T(SUS, n, LCP, SA);
-        time = time_stop(t_start, c_start);
-        break;
-    case 1:
-        time_start(&t_start, &c_start);
-        SUS_1(SUS1, PHI, n, PLCP, Text, ISA, SA);
-        time =time_stop(t_start, c_start);
-        break;
-    case 2:
-        time_start(&t_start, &c_start);
-        SUS_2(SUS2, n, PLCP, PHI, ISA, Text, SA);
-        time = time_stop(t_start, c_start);
-        break;
-    case 3:
-        time_start(&t_start, &c_start);
-        PLCPSUS(PLCP, PHI, Text, n, ISA, SA, SUS3);
-        time = time_stop(t_start, c_start);
-        break;
-    case 4:
-        SUS_C(ISA, SA, LCP, n, Text);
-    default:
-        break;
+    
+    if(time) time_start(&t_start, &c_start);
+    switch (alg){
+      case 0: printf("## SUS_T ##\n");
+          SUS_T(SUS, n, LCP, SA);
+          break;
+      case 1: printf("## SUS_1 ##\n");
+          SUS_1(SUS1, PHI, n, PLCP, Text, ISA, SA);
+          break;
+      case 2: printf("## SUS_2 ##\n");
+          SUS_2(SUS2, n, PLCP, PHI, ISA, Text, SA);
+          break;
+      case 3: printf("## PLCP_SUS ##\n");
+          PLCPSUS(PLCP, PHI, Text, n, ISA, SA, SUS3);
+          break;
+      case 4: printf("## SUS_C ##\n");
+          SUS_C(ISA, SA, LCP, n, Text);
+      default:
+          break;
     }
-    if (type != 0 && type!=4)
+    if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
+
+    if (alg != 0 && alg!=4)
     {
         if (comp == 1)
         {
             SUS_T(SUS, n, LCP, SA);
-            switch (type)
+            switch (alg)
             {
             case 1:
                 if (equal(SUS, SUS1, n))
@@ -154,9 +136,9 @@ int main(int argc, char *argv[])
             }
         }
     }
-    if (pri == 1 && type!=4)
+    if (pri == 1 && alg!=4)
     {
-        switch (type)
+        switch (alg)
         {
         case 0:
             print(SA, SUS, Text, n);
@@ -174,8 +156,7 @@ int main(int argc, char *argv[])
             break;
         }
     }
-    if(t==1 && type!=4)
-        printf("TIME: %.15lf\n", time);
+
     //================================
     //LIBERAÇÃO DOS VETORES
     //================================

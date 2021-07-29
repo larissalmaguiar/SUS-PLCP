@@ -11,6 +11,7 @@ LIBOBJ = \
 	external/malloc_count/malloc_count.o
 
 INPUT = dataset/example.txt
+ALG = 1
 
 ####
 
@@ -23,4 +24,4 @@ clean:
 	\rm -f main-sus lib/*.o external/*.o external/malloc_count/*.o
 
 run:
-	./main-sus $(INPUT) -1 -t
+	./main-sus $(INPUT) -A $(ALG) -t
