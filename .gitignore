@@ -1,6 +1,8 @@
 # ignore objects and archives, anywhere in the tree.
 external/*.[oa]
 lib/*.[oa]
+external/malloc_count/malloc_count.o
+
 *main-sus
 *.swp
 *.swo

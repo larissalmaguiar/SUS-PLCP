@@ -57,11 +57,6 @@ int main(int argc, char *argv[])
     #if DEBUG
       printf("Text = %s$\n\n", Text);
     #endif
-    //================================
-    //CONSTRUÇÃO DO SA E LCP
-    //================================
-    sacak_lcp((unsigned char *)Text, (uint_t *)SA, LCP, n);
-    //================================
     //INICIALIZAÇÃO E CONSTRUÇÃO
     //================================
     time_t t_start=0;
@@ -90,6 +85,15 @@ int main(int argc, char *argv[])
             break;
         }
     }
+
+    //================================
+    //COMPUTING SA AND LCP
+    //================================
+    if(time) time_start(&t_start, &c_start);
+    printf("## SACAK_LCP ##\n");
+    sacak_lcp((unsigned char *)Text, (uint_t *)SA, LCP, n);
+    if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
+    //================================
     
     if(time) time_start(&t_start, &c_start);
     switch (alg){
