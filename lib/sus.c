@@ -115,7 +115,7 @@ void PLCPSUS(int *PLCP, int *PHI, char *Text, int n, int *ISA, uint_t *SA, int *
     PLCP[n] = 0;
     for (int i = 0; i <= n; i++)
     {
-        //printf("i: %d\n", i);
+        // printf("i: %d\n", i);
         k = PHI[i];
         if (k != n)
         {
@@ -128,14 +128,14 @@ void PLCPSUS(int *PLCP, int *PHI, char *Text, int n, int *ISA, uint_t *SA, int *
             SUS[k] = PLCP[i];
             if (PLCP[i]!= -1 && SUS[i]!= -1)
             {
-                //printf("Sufixo (i): %d\tPLCP(i): %d\tPLCP(k): %d\n", i, PLCP[i], SUS[i]);
+                // printf("Sufixo (i): %d\tPLCP(i): %d\tPLCP(k): %d\n", i, PLCP[i], SUS[i]);
                 cur = max(PLCP[i], SUS[i]) + 1;
                 if (n - i - 1 >= cur) SUS[i] = cur;
                 else SUS[i]=0;  
             }
             if (PLCP[k]!= -1 && SUS[k]!= -1)
             {
-                //printf("Sufixo (k): %d\tPLCP(k): %d\tPLCP(phi(k)): %d\n", k, PLCP[k], SUS[k]);
+                // printf("Sufixo (k): %d\tPLCP(k): %d\tPLCP(phi(k)): %d\n", k, PLCP[k], SUS[k]);
                 cur = max(PLCP[k], SUS[k]) + 1;
                 if (n - k - 1 >= cur) SUS[k] = cur;
                 else SUS[k]=0;
@@ -154,6 +154,7 @@ void SUS_T(int *SUS, int n, int_t *LCP, uint_t *SA)
         int cur = 1 + max(lcp(i), lcp(i + 1));
         if (n - SA[i] - 1 >= cur)
             SUS[SA[i]] = cur;
+        // else SUS[SA[i]]=0;
     }
 }
 void SUS_1(int *SUS, int *PHI, int n, int *PLCP, char *Text, int *ISA, uint_t *SA)
@@ -166,6 +167,7 @@ void SUS_1(int *SUS, int *PHI, int n, int *PLCP, char *Text, int *ISA, uint_t *S
         cur = 1 + max(PLCP[i], PLCP[k]);
         if (n - k - 1 >= cur)
             SUS[k] = cur;
+        // else SUS[k]=0;
     }
 }
 void sus_cr (int_t *LCP, int *ISA, int n, int k, char *Text)
