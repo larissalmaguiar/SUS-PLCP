@@ -30,14 +30,14 @@ int main(int argc, char *argv[])
     //================================
     //TRATAMENTO DE ARQUIVO FASTA
     //================================
-    char *Text = (char *)malloc((n) * sizeof(char));
-    char *line = malloc(n);
-    while (fgets(line, n, ent) != NULL)
+    char *Text = (char *)malloc((n+1) * sizeof(char));
+    char *line = malloc(n+1);
+    while (fgets(line, n+1, ent) != NULL)
     {
         if (line[0] != '>')
         {
             int tam = strlen(line);
-            line[tam - 1] = '\0';
+            line[tam-1] = '\0';
             strcat(Text, line);
        }
     }
@@ -46,14 +46,14 @@ int main(int argc, char *argv[])
     //DECLARAÇÃO DE VETORES
     //================================
     uint_t *SA = (uint_t *)malloc((n + 1) * sizeof(uint_t));
-    int_t *LCP = (int_t *)malloc((n + 1) * sizeof(int_t));
-    int *ISA = (int *)malloc((n + 1) * sizeof(int));
-    int *PHI = (int *)malloc((n + 1) * sizeof(int));
-    int *PLCP = (int *)malloc((n + 1) * sizeof(int));
-    int *SUS = (int *)malloc((n) * sizeof(int));
-    int *SUS1 = (int *)malloc((n) * sizeof(int));
-    int *SUS2 = (int *)malloc((n) * sizeof(int));
-    int *SUS3 = (int *)malloc((n) * sizeof(int));
+    int_t *LCP = NULL;
+    int *ISA = NULL;
+    int *PHI = NULL;
+    int *PLCP = NULL;
+    int *SUS = NULL;
+    int *SUS1 = NULL;
+    int *SUS2 = NULL;
+    int *SUS3 = NULL;
     #if DEBUG
       printf("Text = %s$\n\n", Text);
     #endif
@@ -87,29 +87,48 @@ int main(int argc, char *argv[])
     }
 
     //================================
-    //COMPUTING SA AND LCP
+    //COMPUTING SA
     //================================
     if(time) time_start(&t_start, &c_start);
-    printf("## SACAK_LCP ##\n");
-    sacak_lcp((unsigned char *)Text, (uint_t *)SA, LCP, n);
+    printf("## SACAK ##\n");
+    sacak((unsigned char *)Text, (uint_t *)SA, n);
     if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
     //================================
     
     if(time) time_start(&t_start, &c_start);
     switch (alg){
       case 0: printf("## SUS_T ##\n");
+          LCP = (int_t *)malloc((n + 1) * sizeof(int_t));
+          sacak_lcp ((unsigned char *)Text, (uint_t *)SA, (int_t *)LCP, n);
+          SUS = (int *)malloc((n) * sizeof(int));
           SUS_T(SUS, n, LCP, SA);
           break;
       case 1: printf("## SUS_1 ##\n");
+          ISA = (int *)malloc((n + 1) * sizeof(int));
+          PHI = (int *)malloc((n + 1) * sizeof(int));
+          PLCP = (int *)malloc((n + 1) * sizeof(int));
+          SUS1 = (int *)malloc((n) * sizeof(int));
+          for(int i=0; i<n; i++) SUS1[i]=0;
           SUS_1(SUS1, PHI, n, PLCP, Text, ISA, SA);
           break;
       case 2: printf("## SUS_2 ##\n");
+          ISA = (int *)malloc((n + 1) * sizeof(int));
+          PHI = (int *)malloc((n + 1) * sizeof(int));
+          PLCP = (int *)malloc((n + 1) * sizeof(int));
+          SUS2 = (int *)malloc((n) * sizeof(int));
           SUS_2(SUS2, n, PLCP, PHI, ISA, Text, SA);
           break;
       case 3: printf("## PLCP_SUS ##\n");
+          ISA = (int *)malloc((n + 1) * sizeof(int));
+          PHI = (int *)malloc((n + 1) * sizeof(int));
+          PLCP = (int *)malloc((n + 1) * sizeof(int));
+          SUS3 = (int *)malloc((n+1) * sizeof(int));
           PLCPSUS(PLCP, PHI, Text, n, ISA, SA, SUS3);
           break;
       case 4: printf("## SUS_C ##\n");
+          LCP = (int_t *)malloc((n + 1) * sizeof(int_t));
+          sacak_lcp ((unsigned char *)Text, (uint_t *)SA, (int_t *)LCP, n);
+          ISA = (int *)malloc((n + 1) * sizeof(int));
           SUS_C(ISA, SA, LCP, n, Text);
       default:
           break;
@@ -120,6 +139,9 @@ int main(int argc, char *argv[])
     {
         if (comp == 1)
         {
+            LCP = (int_t *)malloc((n + 1) * sizeof(int_t));
+            sacak_lcp ((unsigned char *)Text, (uint_t *)SA, (int_t *)LCP, n);
+            SUS = (int *)malloc((n) * sizeof(int));
             SUS_T(SUS, n, LCP, SA);
             switch (alg)
             {
@@ -169,6 +191,7 @@ int main(int argc, char *argv[])
     free(SUS);
     free(SUS1);
     free(SUS2);
+    free(SUS3);
     free(ISA);
     free(PHI);
     free(PLCP);
