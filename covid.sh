@@ -12,6 +12,6 @@ for i in /home/data/COVID/*; do
 
 	for j in {0..4}; do 
 		echo ALG $j; 
-		echo "./main-sus $i -A $j -t >> results/${test};"
+		./main-sus $i -A $j -t >> results/${test};
 	done;
 done;
