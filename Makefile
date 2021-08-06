@@ -7,6 +7,8 @@ LFLAGS = -lm -lrt -ldl
 
 LIBOBJ = \
 	lib/sus.o\
+	lib/file.o\
+	lib/utils.o\
 	external/sacak-lcp.o\
 	external/malloc_count/malloc_count.o
 

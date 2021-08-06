@@ -1,23 +1,29 @@
-#define DEBUG 0
-#define MAX 10000 //longest FASTA line
+/*
+ * plcp-sus
+ *
+ * Authors: Larissa M. Aguiar and Felipe A. Louza
+ * contact: louza@ufu.br
+ * 06/08/2021
+ *
+ */
 
-//================================
-//BIBLIOTECAS
-//================================
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 #include <time.h>
 #include <unistd.h>
-//================================
-//TADS
-//================================
+
 #include "external/sacak-lcp.h"
 #include "lib/sus.h"
+#include "lib/file.h"
+#include "lib/utils.h"
 #include "external/malloc_count/malloc_count.h"  
 
 #define lcp(i) ((i < n) ? (LCP[i]) : (0))
+
+
+/*************************************/
 
 int main(int argc, char *argv[]){
 
@@ -59,33 +65,36 @@ int main(int argc, char *argv[]){
   //PREPROCESSING FASTA
   //================================
 
-  FILE *ent;
-  ent = fopen(c_file, "r");
-  fseek(ent, 0, SEEK_END);
-  size_t n = ftell(ent);
-  rewind(ent);
-
-  //TODO: verificar se o malloc não é diferente de NULL
-  char *Text = (char *)malloc((n+1) * sizeof(char));
-
-  //  char *line = malloc(n+1); ?? aloca 2 vezes o espaço ??
-  char *line = malloc(MAX);
-
   if(time) time_start(&t_start, &c_start);
   printf("## PREPROCESSING ##\n");
-  while (fgets(line, MAX, ent) != NULL){
-    if (line[0] != '>'){
-      size_t tam = strlen(line);
-      line[tam-1] = '\0';
-      strcat(Text, line);
-    }
-  }
-  //TODO: fechar depois de usar o arquivo, ok?
-  free(line);
-  fclose(ent);
+
+  int k=0;
+  size_t n=0;
+  unsigned char **R = (unsigned char**) file_load_multiple(c_file, &k, &n);
+
+  //concatenate all string
+  unsigned char *T = cat_char(R, k, &n);
+
+  #if DEBUG
+    printf("R:\n");
+    for(int i=0; i<k && i<10; i++)
+      printf("%" PRIdN ") %s (%zu)\n", i, R[i], strlen((char*)R[i]));
+    printf("####\n");
+    for(size_t i=0; i<n; i++) printf("[%d]", T[i]);
+    printf("\n");
+  #endif
+
+  printf("k = %d\n", k);
+  printf("N = %zu bytes\n", n);
+  printf("sizeof(int) = %zu bytes\n", sizeof(int_t)); 
+
+  //free memory
+  for(int i=0; i<k; i++)
+    free(R[i]);
+  free(R);
+
   if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
 
-  n = strlen(Text) + 1;
 
   //================================
   //DECLARAÇÃO DE VETORES
@@ -97,7 +106,7 @@ int main(int argc, char *argv[]){
   int *PLCP = NULL;
   int *SUS = NULL;
 #if DEBUG
-  printf("Text = %s$\n\n", Text);
+  printf("T = %s$\n\n", T);
 #endif
 
   //================================
@@ -111,7 +120,7 @@ int main(int argc, char *argv[]){
     LCP = (int_t *)malloc((n + 1) * sizeof(int_t));
     if(time) time_start(&t_start, &c_start);
     printf("## SACAK_lcp ##\n");
-    sacak_lcp ((unsigned char *)Text, (uint_t *)SA, (int_t *)LCP, n);
+    sacak_lcp ((unsigned char *)T, (uint_t *)SA, (int_t *)LCP, n);
     if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
 
     if(alg == 4){
@@ -122,7 +131,7 @@ int main(int argc, char *argv[]){
 
     if(time) time_start(&t_start, &c_start);
     printf("## SACAK ##\n");
-    sacak((unsigned char *)Text, (uint_t *)SA, n);
+    sacak((unsigned char *)T, (uint_t *)SA, n);
     if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
 
     ISA = (int *)malloc((n + 1) * sizeof(int));
@@ -139,16 +148,16 @@ int main(int argc, char *argv[]){
             break;
     case 1: printf("## SUS_1 ##\n");
             for(int i=0; i<n; i++) SUS[i]=0;
-            SUS_1(SUS, PHI, n, PLCP, Text, ISA, SA);
+            SUS_1(SUS, PHI, n, PLCP, T, ISA, SA);
             break;
     case 2: printf("## SUS_2 ##\n");
-            SUS_2(SUS, n, PLCP, PHI, ISA, Text, SA);
+            SUS_2(SUS, n, PLCP, PHI, ISA, T, SA);
             break;
     case 3: printf("## PLCP_SUS ##\n");
-            PLCPSUS(PLCP, PHI, Text, n, ISA, SA, SUS);
+            PLCPSUS(PLCP, PHI, T, n, ISA, SA, SUS);
             break;
     case 4: printf("## SUS_C ##\n");
-            SUS_C(ISA, SA, LCP, n, Text);
+            SUS_C(ISA, SA, LCP, n, T);
     default:
             break;
   }
@@ -157,16 +166,16 @@ int main(int argc, char *argv[]){
   if (pri == 1 && alg!=4){
     switch (alg){
       case 0:
-        print(SA, SUS, Text, n);
+        print(SA, SUS, T, n);
         break;
       case 1:
-        print(SA, SUS, Text, n);
+        print(SA, SUS, T, n);
         break;
       case 2:
-        print(SA, SUS, Text, n);
+        print(SA, SUS, T, n);
         break;
       case 3:
-        print(SA, SUS, Text, n);
+        print(SA, SUS, T, n);
         break;
       default:
         break;
@@ -185,7 +194,7 @@ int main(int argc, char *argv[]){
 
       if(LCP==NULL){ //TODO: calcular apenas o LCP
         LCP = (int_t *)malloc((n + 1) * sizeof(int_t));
-        sacak_lcp ((unsigned char *)Text, (uint_t *)SA, (int_t *)LCP, n);
+        sacak_lcp ((unsigned char *)T, (uint_t *)SA, (int_t *)LCP, n);
       }
 
       int *SUS_aux = (int *)malloc((n) * sizeof(int));
@@ -216,7 +225,8 @@ int main(int argc, char *argv[]){
   }
   free(SA);
   free(SUS);
-  free(Text);
+  free(T);
 
   return 0;
 }
+

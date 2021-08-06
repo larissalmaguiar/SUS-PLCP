@@ -2,25 +2,8 @@
 #include "sus.h"
 
 #define lcp(i) ((i < n) ? (LCP[i]) : (0))
-//TEMPO DE EXECUÇÃO 
-void time_start(time_t *t_time, clock_t *c_clock)
-{
 
-	*t_time = time(NULL);
-	*c_clock =  clock();
-}
-
-double time_stop(time_t t_time, clock_t c_clock){
-
-	double aux1 = (clock() - c_clock) / (double)(CLOCKS_PER_SEC);
-	double aux2 = difftime (time(NULL),t_time);
-	
-	printf("CLOCK = %lf TIME = %lf\n", aux1, aux2);
-
-	return aux2;
-}
-
-void print(uint_t *SA, int *SUS, char *Text, int n)
+void print(uint_t *SA, int *SUS, unsigned char *T, int n)
 {
     printf("i\tSA\tSUS\tSuffixies\n");
     for (int i = 0; i < n; ++i)
@@ -28,7 +11,7 @@ void print(uint_t *SA, int *SUS, char *Text, int n)
         printf("%d\t%d\t%d\t", i, SA[i], SUS[SA[i]]);
         for (int j = SA[i]; j < n; ++j)
         {
-             printf("%c", Text[j]);
+             printf("%c", T[j]);
         }
         printf("$\n");
     }
@@ -66,7 +49,7 @@ void phi(int *PHI, int n, int *ISA, uint_t *SA)
             PHI[i] = n;
     }
 }
-void buildPLCP(int *PLCP, int *PHI, char *Text, int n, int *ISA, uint_t *SA)
+void buildPLCP(int *PLCP, int *PHI, unsigned char *T, int n, int *ISA, uint_t *SA)
 {
     int l = 0, k = 0;
     phi(PHI, n, ISA, SA);
@@ -75,7 +58,7 @@ void buildPLCP(int *PLCP, int *PHI, char *Text, int n, int *ISA, uint_t *SA)
         k = PHI[i];
         if (k != n)
         {
-            while (Text[k + l] == Text[i + l])
+            while (T[k + l] == T[i + l])
             {
                 l++;
             }
@@ -87,10 +70,10 @@ void buildPLCP(int *PLCP, int *PHI, char *Text, int n, int *ISA, uint_t *SA)
     }
     PLCP[n] = 0;
 }
-void SUS_2(int *SUS2, int n, int *PLCP, int *PHI, int *ISA, char *Text, uint_t *SA)
+void SUS_2(int *SUS2, int n, int *PLCP, int *PHI, int *ISA, unsigned char *T, uint_t *SA)
 {
     int cur;
-    buildPLCP(PLCP, PHI, Text, n, ISA, SA);
+    buildPLCP(PLCP, PHI, T, n, ISA, SA);
     for (int i = 0; i <= n; i++)
     {
         if (PHI[i] != n) SUS2[PHI[i]] = PLCP[i];
@@ -104,7 +87,7 @@ void SUS_2(int *SUS2, int n, int *PLCP, int *PHI, int *ISA, char *Text, uint_t *
             SUS2[i] = 0;
     }
 }
-void PLCPSUS(int *PLCP, int *PHI, char *Text, int n, int *ISA, uint_t *SA, int *SUS)
+void PLCPSUS(int *PLCP, int *PHI, unsigned char *T, int n, int *ISA, uint_t *SA, int *SUS)
 {
     int l = 0, k = 0, cur=0;
     phi(PHI, n, ISA, SA);
@@ -119,7 +102,7 @@ void PLCPSUS(int *PLCP, int *PHI, char *Text, int n, int *ISA, uint_t *SA, int *
         k = PHI[i];
         if (k != n)
         {
-            while (Text[k + l] == Text[i + l])
+            while (T[k + l] == T[i + l])
             {
                 l++;
             }
@@ -157,10 +140,10 @@ void SUS_T(int *SUS, int n, int_t *LCP, uint_t *SA)
         // else SUS[SA[i]]=0;
     }
 }
-void SUS_1(int *SUS, int *PHI, int n, int *PLCP, char *Text, int *ISA, uint_t *SA)
+void SUS_1(int *SUS, int *PHI, int n, int *PLCP, unsigned char *T, int *ISA, uint_t *SA)
 {
     int k, cur;
-    buildPLCP(PLCP, PHI, Text, n, ISA, SA);
+    buildPLCP(PLCP, PHI, T, n, ISA, SA);
     for (int i = 0; i <= n; i++)
     {
         k = PHI[i];
@@ -170,7 +153,9 @@ void SUS_1(int *SUS, int *PHI, int n, int *PLCP, char *Text, int *ISA, uint_t *S
         // else SUS[k]=0;
     }
 }
-void sus_cr (int_t *LCP, int *ISA, int n, int k, char *Text)
+
+
+void sus_cr(int_t *LCP, int *ISA, int n, int k, unsigned char *T)
 {
     int  tam=n, L=0;
     for(int i=0; i<=k; i++)
@@ -190,19 +175,21 @@ void sus_cr (int_t *LCP, int *ISA, int n, int k, char *Text)
         {
             if(max(L+1, k-i+1)==tam)
             {
+                /* ???
                 char sp[n];
-                strcpy(sp, Text+i);
+                strcpy(sp, T+i);
                 sp[tam]='\0';
                 printf("%s\n", sp);
+                */
             }
         }
     }
 }
-void SUS_C(int *ISA,uint_t *SA, int_t *LCP, int n, char *Text)
+void SUS_C(int *ISA,uint_t *SA, int_t *LCP, int n, unsigned char *T)
 {
     isa(ISA, n, SA);
     for(int i=0; i<n-1; i++)
     {
-        sus_cr (LCP, ISA, n, i, Text);
+        sus_cr (LCP, ISA, n, i, T);
     }
 }
