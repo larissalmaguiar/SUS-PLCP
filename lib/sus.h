@@ -29,4 +29,5 @@ void print(uint_t *SA, int *SUS, unsigned char *T, int n);
 void PLCPSUS(int *PLCP, int *PHI, unsigned char *T, int n, int *ISA, uint_t *SA, int *SUS);
 void SUS_C(int *ISA, uint_t *SA, int_t *LCP, int n, unsigned char *T);
 void sus_cr (int_t *LCP, int *ISA, int n, int k, unsigned char *T);
+void lcp_plcp(int_t *LCP, int *PLCP, int *ISA, int n);
 #endif
