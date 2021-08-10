@@ -17,7 +17,10 @@ void print(uint_t *SA, int *SUS, unsigned char *T, int n)
     }
 }
 
-
+void lcp_plcp(int_t *LCP, int *PLCP, int *ISA, int n)
+{
+    for(int i=0; i<n; i++) LCP[ISA[i]]=PLCP[i];
+}
 bool equal(int *v1, int *v2, int tam)
 {
     int i;

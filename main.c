@@ -138,6 +138,24 @@ int main(int argc, char *argv[]){
     PHI = (int *)malloc((n + 1) * sizeof(int));
     PLCP = (int *)malloc((n + 1) * sizeof(int));
   }
+  if(alg==5)
+  {
+    if(time) time_start(&t_start, &c_start);
+    printf("## SACAK ##\n");
+    sacak((unsigned char *)T, (uint_t *)SA, n);
+    if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
+
+    ISA = (int *)malloc((n + 1) * sizeof(int));
+    PHI = (int *)malloc((n + 1) * sizeof(int));
+    PLCP = (int *)malloc((n + 1) * sizeof(int));
+    LCP = (int_t *)malloc((n + 1) * sizeof(int_t));
+    
+    if(time) time_start(&t_start, &c_start);
+    printf("## LCP ##\n");
+    buildPLCP(PLCP,PHI,T,n,ISA,SA);
+    lcp_plcp(LCP, PLCP, ISA, n); 
+    if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
+  }
 
   //================================
 
@@ -158,6 +176,8 @@ int main(int argc, char *argv[]){
             break;
     case 4: printf("## SUS_C ##\n");
             SUS_C(ISA, SA, LCP, n, T);
+    case 5: printf("## SUS_T2 ##\n");
+            SUS_T(SUS, n, LCP, SA);
     default:
             break;
   }
@@ -177,12 +197,15 @@ int main(int argc, char *argv[]){
       case 3:
         print(SA, SUS, T, n);
         break;
+      case 5: 
+        print(SA, SUS, T, n);
+        break;
       default:
         break;
     }
   }
 
-  if(alg == 1 || alg == 2 || alg == 3){
+  if(alg == 1 || alg == 2 || alg == 3||alg==5){
     free(ISA);
     free(PHI);
     free(PLCP);
@@ -213,6 +236,9 @@ int main(int argc, char *argv[]){
           if (equal(SUS, SUS_aux, n))
             printf("SUS and SUST are equal :)\n");
           break;
+        case 5: 
+         if (equal(SUS, SUS_aux, n))
+            printf("SUS and SUST are equal :)\n");
         default:
           break;
       }
@@ -220,7 +246,7 @@ int main(int argc, char *argv[]){
   }
 
   //TODO: verificar
-  if(alg == 0 || alg == 4 || comp == 1){
+  if(alg == 0 || alg == 4 || comp == 1 || alg ==5){
     free(LCP);
   }
   free(SA);
