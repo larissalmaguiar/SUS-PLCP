@@ -101,6 +101,7 @@ int main(int argc, char *argv[]){
   //================================
   uint_t *SA = NULL;
   int_t *LCP = NULL;
+  int_t *LCP1 = NULL;
   int *ISA = NULL;
   int *PHI = NULL;
   int *PLCP = NULL;
@@ -148,13 +149,16 @@ int main(int argc, char *argv[]){
     ISA = (int *)malloc((n + 1) * sizeof(int));
     PHI = (int *)malloc((n + 1) * sizeof(int));
     PLCP = (int *)malloc((n + 1) * sizeof(int));
-    LCP = (int_t *)malloc((n + 1) * sizeof(int_t));
+    LCP1 = (int_t *)malloc((n + 1) * sizeof(int_t));
     
     if(time) time_start(&t_start, &c_start);
     printf("## LCP ##\n");
     buildPLCP(PLCP,PHI,T,n,ISA,SA);
-    lcp_plcp(LCP, PLCP, ISA, n); 
+    lcp_plcp(LCP1, PLCP, ISA, n); 
     if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
+    free (PLCP);
+    free(ISA);
+    free(PHI);
   }
 
   //================================
@@ -177,7 +181,7 @@ int main(int argc, char *argv[]){
     case 4: printf("## SUS_C ##\n");
             SUS_C(ISA, SA, LCP, n, T);
     case 5: printf("## SUS_T2 ##\n");
-            SUS_T(SUS, n, LCP, SA);
+            SUS_T(SUS, n, LCP1, SA);
     default:
             break;
   }
@@ -205,12 +209,12 @@ int main(int argc, char *argv[]){
     }
   }
 
-  if(alg == 1 || alg == 2 || alg == 3||alg==5){
+  if(alg == 1 || alg == 2 || alg == 3){
     free(ISA);
     free(PHI);
     free(PLCP);
   }
-
+  if(alg==5) free(LCP1);
   //VALIDATION
   if (alg != 0 && alg!=4){
     if (comp == 1){
@@ -246,7 +250,7 @@ int main(int argc, char *argv[]){
   }
 
   //TODO: verificar
-  if(alg == 0 || alg == 4 || comp == 1 || alg ==5){
+  if(alg == 0 || alg == 4 || comp == 1){
     free(LCP);
   }
   free(SA);
