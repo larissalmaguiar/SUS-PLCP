@@ -3,7 +3,7 @@
  *
  * Authors: Larissa M. Aguiar and Felipe A. Louza
  * contact: louza@ufu.br
- * 09/08/2021
+ * 16/08/2021
  *
  */
 
@@ -115,8 +115,9 @@ int main(int argc, char *argv[]){
   //================================
   SA = (uint_t *)malloc((n + 1) * sizeof(uint_t));
   SUS = (int *)malloc((n+1) * sizeof(int));
+ 
 
-  if(alg == 0 || alg == 4){
+  if(alg == 0 || alg == 5){
 
     LCP = (int_t *)malloc((n + 1) * sizeof(int_t));
     if(time) time_start(&t_start, &c_start);
@@ -124,43 +125,41 @@ int main(int argc, char *argv[]){
     sacak_lcp ((unsigned char *)T, (uint_t *)SA, (int_t *)LCP, n);
     if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
 
-    if(alg == 4){
+    if(alg == 5){
       ISA = (int *)malloc((n + 1) * sizeof(int));
     }
   }
   if(alg == 1 || alg == 2 || alg == 3){
-
     if(time) time_start(&t_start, &c_start);
     printf("## SACAK ##\n");
     sacak((unsigned char *)T, (uint_t *)SA, n);
     if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
 
-    ISA = (int *)malloc((n + 1) * sizeof(int));
     PHI = (int *)malloc((n + 1) * sizeof(int));
     PLCP = (int *)malloc((n + 1) * sizeof(int));
   }
-  if(alg==5)
+  if(alg==4)
   {
     if(time) time_start(&t_start, &c_start);
     printf("## SACAK ##\n");
     sacak((unsigned char *)T, (uint_t *)SA, n);
     if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
-
-    ISA = (int *)malloc((n + 1) * sizeof(int));
     PHI = (int *)malloc((n + 1) * sizeof(int));
     PLCP = (int *)malloc((n + 1) * sizeof(int));
     LCP1 = (int_t *)malloc((n + 1) * sizeof(int_t));
     
+     
     if(time) time_start(&t_start, &c_start);
     printf("## LCP ##\n");
-    buildPLCP(PLCP,PHI,T,n,ISA,SA);
-    lcp_plcp(LCP1, PLCP, ISA, n); 
+    buildPLCP(PLCP,PHI,T,n,SUS,SA); //SUS usado no lugar de ISA 
+    lcp_plcp(LCP1, PLCP, SUS, n); 
     if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
+
     free (PLCP);
-    free(ISA);
     free(PHI);
   }
-
+  
+ 
   //================================
 
   if(time) time_start(&t_start, &c_start);
@@ -170,87 +169,53 @@ int main(int argc, char *argv[]){
             break;
     case 1: printf("## SUS_1 ##\n");
             for(int i=0; i<n; i++) SUS[i]=0;
-            SUS_1(SUS, PHI, n, PLCP, T, ISA, SA);
+            SUS_1(SUS, PHI, n, PLCP, T, SA);
             break;
     case 2: printf("## SUS_2 ##\n");
-            SUS_2(SUS, n, PLCP, PHI, ISA, T, SA);
+            SUS_2(SUS, n, PLCP, PHI,T, SA);
             break;
     case 3: printf("## PLCP_SUS ##\n");
-            PLCPSUS(PLCP, PHI, T, n, ISA, SA, SUS);
+            PLCPSUS(PLCP, PHI, T, n, SA, SUS);
             break;
-    case 4: printf("## SUS_C ##\n");
-            SUS_C(ISA, SA, LCP, n, T);
-    case 5: printf("## SUS_T2 ##\n");
+    case 4: printf("## SUS_T2 ##\n");
             SUS_T(SUS, n, LCP1, SA);
+            break;
+    case 5: printf("## SUS_C ##\n");
+            SUS_C(ISA, SA, LCP, n, T);
+            break;
     default:
             break;
   }
   if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
 
-  if (pri == 1 && alg!=4){
-    switch (alg){
-      case 0:
+  if (pri == 1 && alg!=5){ 
         print(SA, SUS, T, n);
-        break;
-      case 1:
-        print(SA, SUS, T, n);
-        break;
-      case 2:
-        print(SA, SUS, T, n);
-        break;
-      case 3:
-        print(SA, SUS, T, n);
-        break;
-      case 5: 
-        print(SA, SUS, T, n);
-        break;
-      default:
-        break;
-    }
   }
 
   if(alg == 1 || alg == 2 || alg == 3){
-    free(ISA);
     free(PHI);
     free(PLCP);
   }
-  if(alg==5) free(LCP1);
-  //VALIDATION
-  if (alg != 0 && alg!=4){
-    if (comp == 1){
+  if(alg==4) free(LCP1);
 
+  //VALIDATION
+
+  if (alg != 0 && alg!=5)
+  {
+    if (comp == 1){
       if(LCP==NULL){ //TODO: calcular apenas o LCP
         LCP = (int_t *)malloc((n + 1) * sizeof(int_t));
         sacak_lcp ((unsigned char *)T, (uint_t *)SA, (int_t *)LCP, n);
       }
-
       int *SUS_aux = (int *)malloc((n) * sizeof(int));
       SUS_T(SUS_aux, n, LCP, SA);
-
-      switch (alg){
-        case 1:
-          if (equal(SUS, SUS_aux, n))
-            printf("SUS and SUST are equal :)\n");
-          break;
-        case 2:
-          if (equal(SUS, SUS_aux, n))
-            printf("SUS and SUST are equal :)\n");
-          break;
-        case 3:
-          if (equal(SUS, SUS_aux, n))
-            printf("SUS and SUST are equal :)\n");
-          break;
-        case 5: 
-         if (equal(SUS, SUS_aux, n))
-            printf("SUS and SUST are equal :)\n");
-        default:
-          break;
+        if (equal(SUS, SUS_aux, n))
+          printf("SUS and SUST are equal :)\n");  
       }
-    }
   }
-
   //TODO: verificar
-  if(alg == 0 || alg == 4 || comp == 1){
+
+  if(alg == 0 || alg == 5|| comp == 1){
     free(LCP);
   }
   free(SA);
