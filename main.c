@@ -3,7 +3,7 @@
  *
  * Authors: Larissa M. Aguiar and Felipe A. Louza
  * contact: louza@ufu.br
- * 16/08/2021
+ * 22/08/2021
  *
  */
 
@@ -144,19 +144,19 @@ int main(int argc, char *argv[]){
     printf("## SACAK ##\n");
     sacak((unsigned char *)T, (uint_t *)SA, n);
     if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
-    PHI = (int *)malloc((n + 1) * sizeof(int));
+    //PHI = (int *)malloc((n + 1) * sizeof(int));
     PLCP = (int *)malloc((n + 1) * sizeof(int));
     LCP1 = (int_t *)malloc((n + 1) * sizeof(int_t));
     
      
     if(time) time_start(&t_start, &c_start);
     printf("## LCP ##\n");
-    buildPLCP(PLCP,PHI,T,n,SUS,SA); //SUS usado no lugar de ISA 
+    buildPLCP(PLCP,LCP1,T,n,SUS,SA); //SUS usado no lugar de ISA e LCP usado como PHI
     lcp_plcp(LCP1, PLCP, SUS, n); 
     if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
 
     free (PLCP);
-    free(PHI);
+    //free(PHI);
   }
   
  
