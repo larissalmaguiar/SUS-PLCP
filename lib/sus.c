@@ -71,7 +71,7 @@ void buildPLCP(int *PLCP, int *PHI, unsigned char *T, int n, int *ISA, uint_t *S
 }
 void SUS_2(int *SUS2, int n, int *PLCP, int *PHI, unsigned char *T, uint_t *SA)
 {
-    buildPLCP(PLCP, PHI, T, n,SUS2, SA);// vetor SUS é usado no lugar de ISA 
+   
     int p, cur;
     for (int i = 0; i <= n; i++)
     {
@@ -134,7 +134,6 @@ void SUS_T(int *SUS, int n, int_t *LCP, uint_t *SA)
 void SUS_1(int *SUS, int *PHI, int n, int *PLCP, unsigned char *T, uint_t *SA)
 {
     int k, cur;
-    buildPLCP(PLCP, PHI, T, n, SUS, SA); // vetor SUS é usado no lugar de ISA
     for (int i = 0; i <= n; i++)
     {
         k = PHI[i];
