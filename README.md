@@ -13,7 +13,7 @@ make
 **Run a test:**
 
 ```c
-./main dataset/example.txt -1 -p -c -t
+./main dataset/example.txt -A 1 -p -c -t
 ```
 
 **Output:**
