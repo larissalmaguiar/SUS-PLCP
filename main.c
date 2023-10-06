@@ -102,7 +102,7 @@ int main(int argc, char *argv[]){
   uint_t *SA = NULL;
   int_t *LCP = NULL;
   int_t *LCP1 = NULL;
-  int *ISA = NULL;
+  //int *ISA = NULL;
   int *PHI = NULL;
   int *PLCP = NULL;
   int *SUS = NULL;
@@ -124,11 +124,34 @@ int main(int argc, char *argv[]){
     sacak_lcp ((unsigned char *)T, (uint_t *)SA, (int_t *)LCP, n);
     if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
 
+    /**
     if(alg == 5){
       ISA = (int *)malloc((n + 1) * sizeof(int));
     }
+    **/
   }
-  if(alg == 1 || alg == 2 || alg == 3){
+  if(alg == 1 || alg == 2){
+    if(time) time_start(&t_start, &c_start);
+    printf("## SACAK ##\n");
+    sacak((unsigned char *)T, (uint_t *)SA, n);
+    if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
+
+    PHI = (int *)malloc((n + 1) * sizeof(int));
+
+    if(time) time_start(&t_start, &c_start);
+    printf("## PHI ##\n");
+    buildPHI(PHI, n, SA);//8n bytes 
+    if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start)); 
+
+    //PLCP = (int *)malloc((n + 1) * sizeof(int));
+    PLCP = (int*) SA;
+
+    if(time) time_start(&t_start, &c_start);
+    printf("## PLCP ##\n");
+    buildPLCP(PLCP, PHI, T, n);//
+    if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start)); 
+  }
+  if(alg == 3){
     if(time) time_start(&t_start, &c_start);
     printf("## SACAK ##\n");
     sacak((unsigned char *)T, (uint_t *)SA, n);
@@ -136,13 +159,6 @@ int main(int argc, char *argv[]){
 
     PHI = (int *)malloc((n + 1) * sizeof(int));
     PLCP = (int *)malloc((n + 1) * sizeof(int));
-
-    if(alg!=3){
-    if(time) time_start(&t_start, &c_start);
-    printf("## PLCP ##\n");
-    buildPLCP(PLCP, PHI, T, n,SUS, SA);// vetor SUS é usado no lugar de ISA
-    if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start)); 
-    }
   }
   if(alg==4)
   {
@@ -150,14 +166,23 @@ int main(int argc, char *argv[]){
     printf("## SACAK ##\n");
     sacak((unsigned char *)T, (uint_t *)SA, n);
     if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
-    //PHI = (int *)malloc((n + 1) * sizeof(int));
-    PLCP = (int *)malloc((n + 1) * sizeof(int));
-    LCP1 = (int_t *)malloc((n + 1) * sizeof(int_t));
+    PHI = (int *)malloc((n + 1) * sizeof(int));
+
+    if(time) time_start(&t_start, &c_start);
+    printf("## PHI ##\n");
+    buildPHI(PHI, n, SA);// vetor SUS é usado no lugar de ISA
+    if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start)); 
+
+    PLCP= (int *)malloc((n + 1) * sizeof(int));
+
     if(time) time_start(&t_start, &c_start);
     printf("## LCP ##\n");
-    buildPLCP(PLCP,LCP1,T,n,SUS,SA); //SUS usado no lugar de ISA e LCP usado como PHI
+    buildPLCP(PLCP, PHI, T, n);// vetor SUS é usado no lugar de ISA
+
+    LCP1 = (int_t *)malloc((n + 1) * sizeof(int_t));
     lcp_plcp(LCP1, PLCP, SUS, n); 
     if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
+
     free (PLCP);
   }
   
@@ -170,10 +195,10 @@ int main(int argc, char *argv[]){
             break;
     case 1: printf("## SUS_1 ##\n");
             for(int i=0; i<n; i++) SUS[i]=0;
-            SUS_1(SUS, PHI, n, PLCP, T, SA);
+            SUS_1(SUS, n, PLCP, PHI);//13n bytes
             break;
     case 2: printf("## SUS_2 ##\n");
-            SUS_2(SUS, n, PLCP, PHI,T, SA);
+            SUS_2(SUS, n, PLCP, PHI);//13n bytes
             break;
     case 3: printf("## PLCP_SUS ##\n");
             PLCPSUS(PLCP, PHI, T, n, SA, SUS);
@@ -181,9 +206,11 @@ int main(int argc, char *argv[]){
     case 4: printf("## SUS_T2 ##\n");
             SUS_T(SUS, n, LCP1, SA);
             break;
+    /**
     case 5: printf("## SUS_C ##\n");
             SUS_C(ISA, SA, LCP, n, T);
             break;
+    **/
     default:
             break;
   }
@@ -195,7 +222,7 @@ int main(int argc, char *argv[]){
 
   if(alg == 1 || alg == 2 || alg == 3){
     free(PHI);
-    free(PLCP);
+    if(alg==3) free(PLCP);
   }
   if(alg==4) free(LCP1);
 
@@ -208,7 +235,7 @@ int main(int argc, char *argv[]){
         LCP = (int_t *)malloc((n + 1) * sizeof(int_t));
         sacak_lcp ((unsigned char *)T, (uint_t *)SA, (int_t *)LCP, n);
       }
-      int *SUS_aux = (int *)malloc((n) * sizeof(int));
+      int *SUS_aux = (int *)malloc((n+1) * sizeof(int));
       SUS_T(SUS_aux, n, LCP, SA);
         if (equal(SUS, SUS_aux, n))
           printf("SUS and SUST are equal :)\n");  

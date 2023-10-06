@@ -5,11 +5,13 @@
 
 void print(uint_t *SA, int *SUS, unsigned char *T, int n)
 {
-    printf("i\tSA\tSUS\tSufixies\n");
+    printf("i\tSA\tSUS\tSuffixes\n");
     for (int i = 0; i < n; ++i)
     {
         printf("%d\t%d\t%d\t", i, SA[i], SUS[SA[i]]);
-        for (int j = SA[i]; j < n; ++j) printf("%c", T[j]);
+        for (int j = SA[i]; j < n; ++j)
+          if(T[j]<'A') printf("%c", T[j]);
+          else printf("%c", T[j]-1);
         printf("$\n");
     }
 }
@@ -48,10 +50,22 @@ void phi(int *PHI, int n, int *ISA, uint_t *SA)
             PHI[i] = n;
     }
 }
-void buildPLCP(int *PLCP, int *PHI, unsigned char *T, int n, int *ISA, uint_t *SA)
+
+void buildPHI(int *PHI, int n, uint_t *SA)
+{
+  PHI[SA[0]] = n;
+  SA[n] = n;
+  int i;
+  for(i = 1; i<=n; i++)
+    PHI[SA[i]] = SA[i-1];
+
+}
+
+
+void buildPLCP(int *PLCP, int *PHI, unsigned char *T, int n)//9n bytes
 {
     int l = 0, k = 0;
-    phi(PHI, n, ISA, SA); 
+    //phi(PHI, n, ISA, SA); 
     for (int i = 0; i <= n; i++)
     {
         k = PHI[i];
@@ -69,22 +83,22 @@ void buildPLCP(int *PLCP, int *PHI, unsigned char *T, int n, int *ISA, uint_t *S
     }
     PLCP[n] = 0;
 }
-void SUS_2(int *SUS2, int n, int *PLCP, int *PHI, unsigned char *T, uint_t *SA)
+void SUS_2(int *SUS, int n, int *PLCP, int *PHI)
 {
    
     int p, cur;
     for (int i = 0; i <= n; i++)
     {
         p=PHI[i];
-        if (p!=n) SUS2[p] = PLCP[i];
+        if (p!=n) SUS[p] = PLCP[i];
     }
     for (int i = 0; i < n; i++)
     {
-        cur = max(PLCP[i], SUS2[i]) + 1;
+        cur = max(PLCP[i], SUS[i]) + 1;
         if (n - i - 1 >= cur)
-            SUS2[i] = cur;
+            SUS[i] = cur;
         else
-            SUS2[i] = 0;
+            SUS[i] = 0;
     }
 }
 void PLCPSUS(int *PLCP, int *PHI, unsigned char *T, int n, uint_t *SA, int *SUS)
@@ -131,7 +145,7 @@ void SUS_T(int *SUS, int n, int_t *LCP, uint_t *SA)
         else SUS[SA[i]]=0;
     }
 }
-void SUS_1(int *SUS, int *PHI, int n, int *PLCP, unsigned char *T, uint_t *SA)
+void SUS_1(int *SUS, int n, int *PLCP, int *PHI)
 {
     int k, cur;
     for (int i = 0; i <= n; i++)
