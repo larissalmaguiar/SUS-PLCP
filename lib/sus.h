@@ -11,8 +11,8 @@
 //================================
 //TADS
 //================================
-#include "../external/sacak-lcp.h"
-
+//#include "../external/sacak-lcp.h"
+#include "utils.h"
 
 #define lcp(i) ((i < n) ? (LCP[i]) : (0))
 

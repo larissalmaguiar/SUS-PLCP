@@ -9,7 +9,7 @@ LIBOBJ = \
 	lib/sus.o\
 	lib/file.o\
 	lib/utils.o\
-	external/sacak-lcp.o\
+	external/gsacak.o\
 	external/malloc_count/malloc_count.o
 
 INPUT = dataset/example.txt

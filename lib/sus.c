@@ -10,9 +10,15 @@ void print(uint_t *SA, int *SUS, unsigned char *T, int n)
     {
         printf("%d\t%d\t%d\t", i, SA[i], SUS[SA[i]]);
         for (int j = SA[i]; j < n; ++j)
-          if(T[j]<'A') printf("%c", T[j]);
+        {
+          if(T[j]==0) printf("#");
+          else if (T[j]==1){
+            printf("$");
+            break;
+          }
           else printf("%c", T[j]-1);
-        printf("$\n");
+        }
+        printf("\n");
     }
 }
 

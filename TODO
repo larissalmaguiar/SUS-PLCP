@@ -1,3 +1,7 @@
 1. mudar a concatenacao para adicionar separador entre as strings (pensando no caso dos FASTA)
+OK
 1.1. corrigir a condição de LSUS nos algoritmos (atualmente é por n, precisa ser por $)
 1.2. confirmar se o Phi-algoritmo considera lcp(AC$, AC$)=2 ?
+
+
+Obs.: Estamos considerando o problema do LSUS para conjuntos de cadeias com substrings unicas entre todas do conjunto.

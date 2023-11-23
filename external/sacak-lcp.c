@@ -68,7 +68,7 @@ void compute_lcp_phi_sparse(int_t *s, uint_t *SA1,
 
     l = max(PLCP[i], l);//consider the LCP-value of the lms-substrings
 
-    while(chr(RA[i]+l)==chr(RA[LCP[i]]+l)) ++l;
+    while(chr(RA[i]+l)==chr(RA[LCP[i]]+l) && chr(RA[i]+l)!=1) ++l;
     PLCP[i]=l;
 
     if(LCP[i]==n1-1) l -= RA[i+1]-RA[i];
