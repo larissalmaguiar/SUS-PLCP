@@ -8,7 +8,8 @@ void print(uint_t *SA, int *SUS, unsigned char *T, int n)
     printf("i\tSA\tSUS\tSuffixes\n");
     for (int i = 0; i < n; ++i)
     {
-        printf("%d\t%d\t%d\t", i, SA[i], SUS[SA[i]]);
+        printf("%d\t%d\t%d\t", i, SA[i], SUS[i]);
+        //printf("%d\t%d\t%d\t", i, SA[i], SUS[SA[i]]);
         for (int j = SA[i]; j < n; ++j)
         {
           if(T[j]==0) printf("#");
