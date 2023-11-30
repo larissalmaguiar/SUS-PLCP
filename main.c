@@ -124,44 +124,9 @@ int main(int argc, char *argv[]){
     gsacak((unsigned char *)T, (uint_t *)SA, (int_t *)LCP, NULL, n);
     if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
   }
-  //SUS_1 e SUS_2 
-  //T + SA (PLCP) + PHI = 9n bytes
-  if(alg == 1 || alg == 2){
-    if(time) time_start(&t_start, &c_start);
-    printf("## SACAK ##\n");
-    gsacak((unsigned char *)T, (uint_t *)SA, NULL, NULL, n);
-    if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
-
-    PHI = (int *)malloc((n + 1) * sizeof(int));
-
-    if(time) time_start(&t_start, &c_start);
-    printf("## PHI ##\n");
-    buildPHI(PHI, n, SA);//8n bytes 
-    if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start)); 
-
-    //PLCP = (int *)malloc((n + 1) * sizeof(int));
-    PLCP = (int*) SA;
-
-    if(time) time_start(&t_start, &c_start);
-    printf("## PLCP ##\n");
-    buildPLCP(PLCP, PHI, T, n);//
-    if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start)); 
-  }
-  //PLCP_SUS
-  //T + SA + PHI + PLCP = 13n bytes ?
-  //o algoritmo PHI precisa do SA?
-  if(alg == 3){
-    if(time) time_start(&t_start, &c_start);
-    printf("## SACAK ##\n");
-    gsacak((unsigned char *)T, (uint_t *)SA, NULL, NULL, n);
-    if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
-
-    PHI = (int *)malloc((n + 1) * sizeof(int));
-    PLCP = (int *)malloc((n + 1) * sizeof(int));
-  }
   //SUS_T2
   //T + SA + PHI + PLCP + LCP = 17n bytes
-  if(alg==4){
+  if(alg==1){
     if(time) time_start(&t_start, &c_start);
     printf("## SACAK ##\n");
     gsacak((unsigned char *)T, (uint_t *)SA, NULL, NULL, n);
@@ -186,6 +151,41 @@ int main(int argc, char *argv[]){
 
     free (PLCP);
   }
+  //SUS_1 e SUS_2 
+  //T + SA (PLCP) + PHI = 9n bytes
+  if(alg == 2 || alg == 3){
+    if(time) time_start(&t_start, &c_start);
+    printf("## SACAK ##\n");
+    gsacak((unsigned char *)T, (uint_t *)SA, NULL, NULL, n);
+    if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
+
+    PHI = (int *)malloc((n + 1) * sizeof(int));
+
+    if(time) time_start(&t_start, &c_start);
+    printf("## PHI ##\n");
+    buildPHI(PHI, n, SA);//8n bytes 
+    if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start)); 
+
+    //PLCP = (int *)malloc((n + 1) * sizeof(int));
+    PLCP = (int*) SA;
+
+    if(time) time_start(&t_start, &c_start);
+    printf("## PLCP ##\n");
+    buildPLCP(PLCP, PHI, T, n);//
+    if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start)); 
+  }
+  //PLCP_SUS
+  //T + SA + PHI + PLCP = 13n bytes ?
+  //o algoritmo PHI precisa do SA?
+  if(alg == 4){
+    if(time) time_start(&t_start, &c_start);
+    printf("## SACAK ##\n");
+    gsacak((unsigned char *)T, (uint_t *)SA, NULL, NULL, n);
+    if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
+
+    PHI = (int *)malloc((n + 1) * sizeof(int));
+    PLCP = (int *)malloc((n + 1) * sizeof(int));
+  }
   
   //4n bytes 
   SUS = (int *)malloc((n+1) * sizeof(int));
@@ -194,20 +194,21 @@ int main(int argc, char *argv[]){
   if(time) time_start(&t_start, &c_start);
   switch (alg){
     case 0: printf("## SUS_T ##\n");
-            SUS_T(SUS, n, LCP, SA);
+            SUS_T(T, SUS, n, LCP, SA);
             break;
-    case 1: printf("## SUS_1 ##\n");
+            //OK
+    case 1: printf("## SUS_T2 ##\n");
+            SUS_T(T, SUS, n, LCP1, SA);
+            break;
+    case 2: printf("## SUS_1 ##\n");
             for(int i=0; i<n; i++) SUS[i]=0;
             SUS_1(SUS, n, PLCP, PHI);//13n bytes
             break;
-    case 2: printf("## SUS_2 ##\n");
+    case 3: printf("## SUS_2 ##\n");
             SUS_2(SUS, n, PLCP, PHI);//13n bytes
             break;
-    case 3: printf("## PLCP_SUS ##\n");
+    case 4: printf("## PLCP_SUS ##\n");
             PLCPSUS(PLCP, PHI, T, n, SA, SUS);
-            break;
-    case 4: printf("## SUS_T2 ##\n");
-            SUS_T(SUS, n, LCP1, SA);
             break;
     default:
             break;
@@ -218,27 +219,24 @@ int main(int argc, char *argv[]){
         print(SA, SUS, T, n);
   }
 
-  if(alg == 1 || alg == 2 || alg == 3){
+  if(alg == 2 || alg == 3 || alg == 4){
     free(PHI);
-    if(alg==3) free(PLCP);
+    if(alg==4) free(PLCP);
   }
-  if(alg==4) free(LCP1);
+  if(alg==1) free(LCP1);
 
   //VALIDATION
 
-  if (alg != 0)
-  {
-    if (comp == 1){
-      if(LCP==NULL){ //TODO: calcular apenas o LCP
-        LCP = (int_t *)malloc((n + 1) * sizeof(int_t));
-    //    sacak_lcp ((unsigned char *)T, (uint_t *)SA, (int_t *)LCP, n);
-    gsacak((unsigned char *)T, (uint_t *)SA, (int_t *)LCP, NULL, n);
-      }
-      int *SUS_aux = (int *)malloc((n+1) * sizeof(int));
-      SUS_T(SUS_aux, n, LCP, SA);
-        if (equal(SUS, SUS_aux, n))
-          printf("SUS and SUST are equal :)\n");  
-      }
+  if (comp == 1){
+    if(LCP==NULL){ //TODO: calcular apenas o LCP
+      LCP = (int_t *)malloc((n + 1) * sizeof(int_t));
+  //    sacak_lcp ((unsigned char *)T, (uint_t *)SA, (int_t *)LCP, n);
+  gsacak((unsigned char *)T, (uint_t *)SA, (int_t *)LCP, NULL, n);
+    }
+    int *SUS_aux = (int *)malloc((n+1) * sizeof(int));
+    SUS_T(T, SUS_aux, n, LCP, SA);
+      if (equal(SUS, SUS_aux, n))
+        printf("SUS and SUST are equal :)\n");  
   }
   //TODO: verificar
 

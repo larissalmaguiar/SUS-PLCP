@@ -1,6 +1,8 @@
 1. mudar a concatenacao para adicionar separador entre as strings (pensando no caso dos FASTA)
 OK
 1.1. corrigir a condição de LSUS nos algoritmos (atualmente é por n, precisa ser por $)
+-> alg_0 OK
+
 1.2. confirmar se o Phi-algoritmo considera lcp(AC$, AC$)=2 ?
 
 

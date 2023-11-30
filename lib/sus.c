@@ -3,14 +3,32 @@
 
 #define lcp(i) ((i < n) ? (LCP[i]) : (0))
 
-void print(uint_t *SA, int *SUS, unsigned char *T, int n)
+void print(uint_t *A, int *B, unsigned char *T, int n)
 {
-    printf("i\tSA\tSUS\tSuffixes\n");
+    printf("i\tA\tB\tSuffixes\n");
     for (int i = 0; i < n; ++i)
     {
-        printf("%d\t%d\t%d\t", i, SA[i], SUS[i]);
-        //printf("%d\t%d\t%d\t", i, SA[i], SUS[SA[i]]);
-        for (int j = SA[i]; j < n; ++j)
+        printf("%d\t%d\t%d\t", i, A[i], B[i]);
+        for (int j = A[i]; j < n; ++j)
+        {
+          if(T[j]==0) printf("#");
+          else if (T[j]==1){
+            printf("$");
+            break;
+          }
+          else printf("%c", T[j]-1);
+        }
+        printf("\n");
+    }
+}
+
+void print_sus(uint_t *A, int *B, unsigned char *T, int n)
+{
+    printf("i\tA\tB\tSuffixes\n");
+    for (int i = 0; i < n; ++i)
+    {
+        printf("%d\t%d\t%d\t", i, A[i], B[A[i]]);
+        for (int j = A[i]; j < n; ++j)
         {
           if(T[j]==0) printf("#");
           else if (T[j]==1){
@@ -142,16 +160,19 @@ void PLCPSUS(int *PLCP, int *PHI, unsigned char *T, int n, uint_t *SA, int *SUS)
         else PLCP[i] = 0;
     }
 }
-void SUS_T(int *SUS, int n, int_t *LCP, uint_t *SA)
+//checked :)
+void SUS_T(unsigned char *T, int *SUS, int n, int_t *LCP, uint_t *SA)
 {
+    SUS[SA[0]]=0;
     for (int i = 1; i < n; i++)
     {
-        int cur = 1 + max(lcp(i), lcp(i + 1));
-        if (n - SA[i] - 1 >= cur)
+        int cur = max(lcp(i), lcp(i + 1))+1;
+        if (T[SA[i]+cur-1] != 1) //separator == 1
             SUS[SA[i]] = cur;
         else SUS[SA[i]]=0;
     }
 }
+
 void SUS_1(int *SUS, int n, int *PLCP, int *PHI)
 {
     int k, cur;
