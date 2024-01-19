@@ -6,7 +6,7 @@
 void print(uint_t *A, int *B, unsigned char *T, int n)
 {
     printf("i\tA\tB\tSuffixes\n");
-    for (int i = 0; i < n; ++i)
+    for (int i = 0; i <= n; ++i)
     {
         printf("%d\t%d\t%d\t", i, A[i], B[i]);
         for (int j = A[i]; j < n; ++j)
@@ -25,7 +25,7 @@ void print(uint_t *A, int *B, unsigned char *T, int n)
 void print_sus(uint_t *A, int *B, unsigned char *T, int n)
 {
     printf("i\tA\tB\tSuffixes\n");
-    for (int i = 0; i < n; ++i)
+    for (int i = 0; i <n; ++i)
     {
         printf("%d\t%d\t%d\t", i, A[i], B[A[i]]);
         for (int j = A[i]; j < n; ++j)
@@ -40,15 +40,10 @@ void print_sus(uint_t *A, int *B, unsigned char *T, int n)
         printf("\n");
     }
 }
-
-void lcp_plcp(int_t *LCP, int *PLCP, int *ISA, int n)
-{
-    for(int i=0; i<=n; i++) LCP[ISA[i]]=PLCP[i];
-}
 bool equal(int *v1, int *v2, int tam)
 {
     int i;
-    for (i = 0; i < tam; i++)
+    for (i = 0; i <tam; i++)
     {
         if (v1[i] != v2[i])
         {
@@ -59,6 +54,10 @@ bool equal(int *v1, int *v2, int tam)
     return true;
 }
 
+void lcp_plcp(int_t *LCP, int *PLCP, uint_t *SA, int n)
+{
+    for(int i=0; i<=n; i++) LCP[i]=PLCP[SA[i]];
+}
 void isa(int *ISA, int n, uint_t *SA)
 {
     SA[n] = n;
@@ -75,7 +74,6 @@ void phi(int *PHI, int n, int *ISA, uint_t *SA)
             PHI[i] = n;
     }
 }
-
 void buildPHI(int *PHI, int n, uint_t *SA)
 {
   PHI[SA[0]] = n;
@@ -85,8 +83,6 @@ void buildPHI(int *PHI, int n, uint_t *SA)
     PHI[SA[i]] = SA[i-1];
 
 }
-
-
 void buildPLCP(int *PLCP, int *PHI, unsigned char *T, int n)//9n bytes
 {
     int l = 0, k = 0;
@@ -96,9 +92,10 @@ void buildPLCP(int *PLCP, int *PHI, unsigned char *T, int n)//9n bytes
         k = PHI[i];
         if (k != n)
         {
-            while (T[k + l] == T[i + l])
+            while (T[k + l] == T[i + l] && T[k+l]!=1)
             {
                 l++;
+                
             }
             PLCP[i] = l;
             l = max((l - 1), 0);
@@ -108,20 +105,20 @@ void buildPLCP(int *PLCP, int *PHI, unsigned char *T, int n)//9n bytes
     }
     PLCP[n] = 0;
 }
-void SUS_2(int *SUS, int n, int *PLCP, int *PHI)
+void SUS_2(int *SUS, int n, int *PLCP, int *PHI, unsigned char *T)
 {
-   
-    int p, cur;
-    for (int i = 0; i <= n; i++)
+    n--;
+    int p, cur, i;
+    for (i = 0; i <= n; i++)
     {
         p=PHI[i];
         if (p!=n) SUS[p] = PLCP[i];
     }
-    for (int i = 0; i < n; i++)
+    for (i = 0; i < n; i++)
     {
-        cur = max(PLCP[i], SUS[i]) + 1;
-        if (n - i - 1 >= cur)
-            SUS[i] = cur;
+        cur = max(PLCP[i], SUS[i]);
+        if (n - i >= cur && T[i+cur]!= 1)
+            SUS[i] = cur+1;
         else
             SUS[i] = 0;
     }
@@ -163,24 +160,25 @@ void PLCPSUS(int *PLCP, int *PHI, unsigned char *T, int n, uint_t *SA, int *SUS)
 //checked :)
 void SUS_T(unsigned char *T, int *SUS, int n, int_t *LCP, uint_t *SA)
 {
-    SUS[SA[0]]=0;
-    for (int i = 1; i < n; i++)
+    //SUS[SA[0]]=0; // O sufixo em SA[0] não é atualizado no loop, pq?
+
+    for (int i = 0; i < n; i++)
     {
         int cur = max(lcp(i), lcp(i + 1))+1;
-        if (T[SA[i]+cur-1] != 1) //separator == 1
+        if (T[SA[i]+cur-1] != 1 && cur+SA[i]<=n-1) //separator == 1
             SUS[SA[i]] = cur;
         else SUS[SA[i]]=0;
     }
 }
 
-void SUS_1(int *SUS, int n, int *PLCP, int *PHI)
+void SUS_1(int *SUS, int n, int *PLCP, int *PHI, unsigned char *T)
 {
-    int k, cur;
+    int k, cur;    
     for (int i = 0; i <= n; i++)
     {
-        k = PHI[i];
-        cur = 1 + max(PLCP[i], PLCP[k]);
-        if (n - k - 1 >= cur)
+        k = PHI[i]; // sufixo que antecede o sufixo i 
+        cur = 1 + max(PLCP[i], PLCP[k]); // tamanho da subcadeia 
+        if (n - k - 1 >= cur && T[k+cur-1] != 1)
             SUS[k] = cur;
         else SUS[k]=0;
     }
