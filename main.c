@@ -242,6 +242,7 @@ int main(int argc, char *argv[]){
     SUS_T(T, SUS_aux, n, LCP, SA);
     if (equal(SUS, SUS_aux, n))
         printf("SUS and SUST are equal :)\n");  
+    free(SUS_aux);
   }
   //TODO: verificar
 

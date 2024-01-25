@@ -4,6 +4,6 @@ OK
 -> alg_0 OK
 
 1.2. confirmar se o Phi-algoritmo considera lcp(AC$, AC$)=2 ?
-
+OK
 
 Obs.: Estamos considerando o problema do LSUS para conjuntos de cadeias com substrings unicas entre todas do conjunto.
