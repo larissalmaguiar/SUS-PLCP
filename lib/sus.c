@@ -134,23 +134,24 @@ void PLCPSUS(int *PLCP, int *PHI, unsigned char *T, int n, uint_t *SA, int *SUS)
         k = PHI[i];
         if (k != n)
         {
-            while (T[k + l] == T[i + l])
+            while ( T[k+l]!=1 && T[k + l] == T[i + l] )
             {
                 l++;
             }
             PLCP[i] = l;
+            SUS[k] = l;
             l = max((l - 1), 0);
-            SUS[k] = PLCP[i];
+            
             if (SUS[i]!= -1)
             {
-                cur = max(PLCP[i], SUS[i]) + 1;
-                if (n - i - 1 >= cur) SUS[i] = cur;
+                cur = max(PLCP[i], SUS[i]) ;
+                if (n - i >= cur && T[i+cur] != 1) SUS[i] = cur+1;
                 else SUS[i]=0;  
             }
             if (PLCP[k]!= -1)
             {
-                cur = max(PLCP[k], SUS[k]) + 1;
-                if (n - k - 1 >= cur) SUS[k] = cur;
+                cur = max(PLCP[k], SUS[k]);
+                if (n - k  >= cur && T[k+cur] != 1) SUS[k] = cur+1;
                 else SUS[k]=0;
             }
         }
