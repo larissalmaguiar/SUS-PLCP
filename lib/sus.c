@@ -216,7 +216,7 @@ void SUS_11(int *SUS, int n, int *PLCP, int *PHI, unsigned char *T)
 void SUS_1(int sa_last, int n, int *PLCP, int *PHI, unsigned char *T)
 {
 
-    int k, cur, aux, i, cont=0, plcp_ant;  
+    int k, cur, aux, i, cont=0;  
     PHI[n]=sa_last; 
     //for(int i =0; i<=n; i++) printf("PHI[%d]: %d\n", i, PHI[i]);
     k=PHI[0];// sufixo que antecede o sufixo i 

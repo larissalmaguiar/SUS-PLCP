@@ -57,7 +57,7 @@ unsigned char* cat_char(unsigned char** R, int k, size_t *n){
 
 	int_t i, j;
 	int_t l=0;
-	unsigned char *str = (unsigned char*) malloc((*n)*sizeof(unsigned char));
+	unsigned char *str = (unsigned char*) malloc((*n+1)*sizeof(unsigned char));
 
 	for(i=0; i<k; i++){
 		int_t m = strlen((char*)R[i]);
@@ -82,6 +82,8 @@ unsigned char* cat_char(unsigned char** R, int k, size_t *n){
 		printf("N = %" PRIdN "\n", l);
 	}
 	*n = l;
+	
+  str[*n]=0;
 
 return str;
 }

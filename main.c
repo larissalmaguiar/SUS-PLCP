@@ -170,7 +170,7 @@ int main(int argc, char *argv[]){
     buildPHI(PHI, n, SA);//8n bytes 
     if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start)); 
     
-    printf("SA_LAST: %d", sa_last);
+    //printf("SA_LAST: %d", sa_last);
     //PLCP = (int *)malloc((n + 1) * sizeof(int));
     PLCP = (int*) SA;
 
@@ -248,33 +248,36 @@ int main(int argc, char *argv[]){
   }
   //VALIDATION
   if (comp == 1){
-    LCP=NULL; //TODO: calcular apenas o LCP
-    LCP = (int_t *)malloc((n + 1) * sizeof(int_t));
-    SA = (uint_t *)malloc((n + 1) * sizeof(uint_t));
-    gsacak((unsigned char *)T, (uint_t *)SA, (int_t *)LCP, NULL, n);
-    int *SUS_aux = (int *)malloc((n+1) * sizeof(int));
-    SUS_T(T, SUS_aux, n, LCP, SA);
-    if (equal(SUS, SUS_aux, n))
+    int_t* LCP2 = (int_t *)malloc((n + 1) * sizeof(int_t));
+    uint_t* SA2 = (uint_t *)malloc((n + 1) * sizeof(uint_t));
+    gsacak((unsigned char *)T, (uint_t *)SA2, (int_t *)LCP2, NULL, n);
+    int *SUS2 = (int *)malloc((n+1) * sizeof(int));
+    SUS_T(T, SUS2, n, LCP2, SA2);
+    if (equal(SUS, SUS2, n))
         printf("SUS and SUST are equal :)\n");  
-    free(SUS_aux);
-    free(LCP); 
+    free(SUS2);
+    free(LCP2); 
+    free(SA2);
   }
  
   //TODO: verificar
 
-  /*if(alg == 0 || comp == 1){
+  if(alg == 0){
     free(LCP);
   }
+  if(alg == 0 || alg == 1){
+    free(SUS);
+  }
+  /*
   free(SA);
   if(alg!=2) free(SUS);
   */
- free(T);
- free(SA);
- if(alg==2 || alg==1 || alg==3)
- {
-  free(PHI);
- }
- if(alg==1) free(SUS);
-  return 0;
+  free(T);
+  free(SA);
+  if(alg==2 || alg==1 || alg==3)
+  {
+   free(PHI);
+  }
+
 }
 
