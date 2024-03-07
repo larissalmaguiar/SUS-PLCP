@@ -195,24 +195,37 @@ void SUS_T(unsigned char *T, int *SUS, int n, int_t *LCP, uint_t *SA)
         else SUS[SA[i]]=0;
     }
 }
-/*
-void SUS_11(int *SUS, int n, int *PLCP, int *PHI, unsigned char *T)
-{
 
+void SUS1_13(int *SUS, int n, int *PLCP, int *PHI, unsigned char *T)
+{
     int k, cur;    
     for (int i = 0; i <= n; i++)
     {
         k = PHI[i]; // sufixo que antecede o sufixo i 
-        cur = 1 + max(PLCP[i], PLCP[k]); // tamanho da subcadeia 
-        if (n - k - 1 >= cur && T[k+cur-1] != 1)
-            SUS[k] = cur;
+        cur = max(PLCP[i], PLCP[k]); // tamanho da subcadeia 
+        if (n - k >= cur && T[k+cur] != 1 && T[k+cur] != 0)
+            SUS[k] = cur+1;
         else SUS[k]=0;
     }
-
-    for(int i =0; i<=n; i++) printf("SUS[%d]: %d\n", i, SUS[i]);
 }
-//*/
-///*
+void SUS2_13(int *SUS, int n, int *PLCP, int *PHI, unsigned char *T)
+{
+    n--;
+    int p, cur, i;
+    for (i = 0; i <= n; i++)
+    {
+        p=PHI[i];
+        if (p!=n) SUS[p] = PLCP[i];
+    }
+    for (i = 0; i <=n; i++)
+    {
+        cur = max(PLCP[i], SUS[i]);
+        if (n - i >= cur && T[i+cur]!= 1 && T[i+cur]!=0)
+            SUS[i] = cur+1;
+        else
+            SUS[i] = 0;
+    }
+}
 void SUS_1(int sa_last, int n, int *PLCP, int *PHI, unsigned char *T)
 {
 
@@ -232,44 +245,5 @@ void SUS_1(int sa_last, int n, int *PLCP, int *PHI, unsigned char *T)
         else PLCP[i]=0;
         k=i; // na segunda iteração o k vira i, então a comparação entre os plcps passa a ser de plcp[k] e aux que é o plcp[i] da iteração anterior, em que k=i
         cont++; 
-    }
-}
-//*/
-void sus_cr(int_t *LCP, int *ISA, int n, int k, unsigned char *T)
-{
-    int  tam=n, L=0;
-    for(int i=0; i<=k; i++)
-    {
-        L=max(LCP[ISA[i]], LCP[ISA[i]+1]);
-        if(i+L<n-1)
-        {
-            if(max(L+1, k-i+1)<tam) tam=max(L+1, k-i+1);
-            else break; 
-        }
-    }
-    printf("K: %d\t Length: %d\n", k, tam);
-    for(int i=0; i<=k; i++)
-    {
-        L=max(LCP[ISA[i]], LCP[ISA[i]+1]);
-        if(i+L<n-1)
-        {
-            if(max(L+1, k-i+1)==tam)
-            {
-                /* ???
-                char sp[n];
-                strcpy(sp, T+i);
-                sp[tam]='\0';
-                printf("%s\n", sp);
-                */
-            }
-        }
-    }
-}
-void SUS_C(int *ISA,uint_t *SA, int_t *LCP, int n, unsigned char *T)
-{
-    isa(ISA, n, SA);
-    for(int i=0; i<n-1; i++)
-    {
-        sus_cr (LCP, ISA, n, i, T);
     }
 }

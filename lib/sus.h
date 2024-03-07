@@ -23,7 +23,9 @@ void buildPLCP(int *PLCP, int *PHI, unsigned char *T, int n); //9n bytes
 void SUS_T(unsigned char *T, int *SUS, int n, int_t *LCP, uint_t *SA);
 //void SUS_11(int *SUS, int n, int *PLCP, int *PHI,unsigned char *T );
 void SUS_1(int sa_last, int n, int *PLCP, int *PHI, unsigned char *T);
+void SUS1_13(int *SUS, int n, int *PLCP, int *PHI, unsigned char *T);
 void SUS_2(int sa_last, int n, int *PLCP, int *PHI, unsigned char *T);
+void SUS2_13(int *SUS, int n, int *PLCP, int *PHI, unsigned char *T);
 void isa(int *ISA, int n, uint_t *SA);
 void phi (int *PHI, int n, int *ISA, uint_t *SA);
 void buildPHI(int *PHI, int n, uint_t *SA);
