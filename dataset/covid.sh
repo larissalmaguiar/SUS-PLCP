@@ -1,8 +1,8 @@
 #! /bin/sh
 
-mkdir -p /SUS-PLCP/dataset/results 
+mkdir -p results 
 
-for i in /SUS-PLCP/dataset/COVID/*; do 
+for i in ../dataset/COVID/*; do 
 
     test=${i##*/}; 
     date >> /SUS-PLCP/dataset/results/${test}
