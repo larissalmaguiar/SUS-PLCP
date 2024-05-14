@@ -32,10 +32,10 @@ int main(int argc, char *argv[]){
   clock_t c_start=0;
 
   extern char *optarg;
-  extern int optind, opterr, optopt;
+  extern int_t optind, opterr, optopt;
   char *c_file=NULL;
 
-  int c, alg = 0, comp = 0, pri = 0, time=0;
+  int_t c, alg = 0, comp = 0, pri = 0, time=0;
   while ((c = getopt(argc, argv, "A:kpct")) != -1){
     switch (c){
       case 'A':
@@ -69,7 +69,7 @@ int main(int argc, char *argv[]){
   if(time) time_start(&t_start, &c_start);
   printf("## PREPROCESSING ##\n");
 
-  int k=0;
+  int_t k=0;
   size_t n=0;
   unsigned char **R = (unsigned char**) file_load_multiple(c_file, &k, &n);
 
@@ -88,7 +88,7 @@ int main(int argc, char *argv[]){
   printf("sizeof(int) = %zu bytes\n", sizeof(int_t)); 
 
   //free memory
-  for(int i=0; i<k; i++)
+  for(int_t i=0; i<k; i++)
     free(R[i]);
   free(R);
 
@@ -102,9 +102,9 @@ int main(int argc, char *argv[]){
   int_t *LCP = NULL;
   int_t *LCP1 = NULL;
   //int *ISA = NULL;
-  int *PHI = NULL;
-  int *PLCP = NULL;
-  int *SUS = NULL;
+  int_t *PHI = NULL;
+  int_t *PLCP = NULL;
+  int_t *SUS = NULL;
 #if DEBUG
   printf("T = %s$\n\n", T);
 #endif
@@ -133,7 +133,7 @@ int main(int argc, char *argv[]){
     gsacak((unsigned char *)T, (uint_t *)SA, NULL, NULL, n);
     if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
 
-    PHI = (int *)malloc((n + 1) * sizeof(int));
+    PHI = (int_t *)malloc((n + 1) * sizeof(int));
 
     if(time) time_start(&t_start, &c_start);
     printf("## PHI ##\n");
@@ -141,7 +141,7 @@ int main(int argc, char *argv[]){
 
     if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start)); 
 
-    PLCP= (int *)malloc((n + 1) * sizeof(int));
+    PLCP= (int_t *)malloc((n + 1) * sizeof(int));
      
     if(time) time_start(&t_start, &c_start);
     printf("## LCP ##\n");
@@ -151,19 +151,18 @@ int main(int argc, char *argv[]){
     lcp_plcp(LCP1, PLCP, SA, n); // 12n bytes
     if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
     free (PLCP); 
-
   }
 
   //SUS_1 e SUS_2 
   //T + SA (PLCP) + PHI = 9n bytes
-  int sa_last=0;
+  int_t sa_last=0;
   if(alg == 2 || alg == 3){
     if(time) time_start(&t_start, &c_start);
     printf("## SACAK ##\n");
     gsacak((unsigned char *)T, (uint_t *)SA, NULL, NULL, n);
     if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
     sa_last = SA[n-1];
-    PHI = (int *)malloc((n + 1) * sizeof(int));
+    PHI = (int_t *)malloc((n + 1) * sizeof(int));
 
     if(time) time_start(&t_start, &c_start);
     printf("## PHI ##\n");
@@ -186,8 +185,8 @@ int main(int argc, char *argv[]){
     gsacak((unsigned char *)T, (uint_t *)SA, NULL, NULL, n);
     if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
 
-    PHI = (int *)malloc((n + 1) * sizeof(int));
-    PLCP = (int *)malloc((n + 1) * sizeof(int));
+    PHI = (int_t *)malloc((n + 1) * sizeof(int));
+    PLCP = (int_t *)malloc((n + 1) * sizeof(int));
   }
   
   //SUS 1 E 2 COM 13n BYTES-> melhor tempo
@@ -198,7 +197,7 @@ int main(int argc, char *argv[]){
     gsacak((unsigned char *)T, (uint_t *)SA, NULL, NULL, n);
     if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
 
-    PHI = (int *)malloc((n + 1) * sizeof(int));
+    PHI = (int_t *)malloc((n + 1) * sizeof(int));
 
     if(time) time_start(&t_start, &c_start);
     printf("## PHI ##\n");
@@ -217,13 +216,13 @@ int main(int argc, char *argv[]){
   switch (alg){
     case 0: printf("## SUS_T ##\n");
             //4n bytes 
-            SUS = (int *)malloc((n+1) * sizeof(int));
+            SUS = (int_t *)malloc((n+1) * sizeof(int));
             SUS_T(T, SUS, n, LCP, SA); //13n bytes
             break;
             //OK
     case 1: printf("## SUS_T2 ##\n");
             //4n bytes 
-            SUS = (int *)malloc((n+1) * sizeof(int));
+            SUS = (int_t *)malloc((n+1) * sizeof(int));
             SUS_T(T, SUS, n, LCP1, SA); //13n bytes
             break;
             //OK
@@ -244,15 +243,15 @@ int main(int argc, char *argv[]){
             //OK
     case 4: printf("## PLCP_SUS ##\n");
             //4n bytes 
-            SUS = (int *)malloc((n+1) * sizeof(int));
+            SUS = (int_t *)malloc((n+1) * sizeof(int));
             PLCPSUS(PLCP, PHI, T, n, SA, SUS);
             break;
-    case 5: printf("## SUS1_13 ##\n");
-            SUS = (int *)malloc((n+1) * sizeof(int));
+    case 5: printf("## SUS1_13n ##\n");
+            SUS = (int_t *)malloc((n+1) * sizeof(int));
             SUS1_13(SUS, n, PLCP,PHI, T);
             break; 
-    case 6: printf("## SUS1_13 ##\n");
-            SUS = (int *)malloc((n+1) * sizeof(int));
+    case 6: printf("## SUS2_13n ##\n");
+            SUS = (int_t *)malloc((n+1) * sizeof(int));
             SUS2_13(SUS, n, PLCP,PHI, T);
             break; 
     default:
@@ -262,7 +261,7 @@ int main(int argc, char *argv[]){
 
   if(pri ==1)
   {
-     for(int i=0; i<=n; i++)
+     for(int_t i=0; i<=n; i++)
     {
       if(T[i]!=1 && T[i]!=0){
       printf("SUS[%d]: \t %d\t T[%d]:\t %c\n", i, SUS[i], i, T[i]-1);
@@ -278,7 +277,7 @@ int main(int argc, char *argv[]){
     int_t* LCP2 = (int_t *)malloc((n + 1) * sizeof(int_t));
     uint_t* SA2 = (uint_t *)malloc((n + 1) * sizeof(uint_t));
     gsacak((unsigned char *)T, (uint_t *)SA2, (int_t *)LCP2, NULL, n);
-    int *SUS2 = (int *)malloc((n+1) * sizeof(int));
+    int_t *SUS2 = (int_t *)malloc((n+1) * sizeof(int));
     SUS_T(T, SUS2, n, LCP2, SA2);
     if (equal(SUS, SUS2, n))
         printf("SUS and SUST are equal :)\n");  
