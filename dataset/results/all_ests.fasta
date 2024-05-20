@@ -1,0 +1,12 @@
+ter 14 mai 2024 17:39:37 -03
+## PREPROCESSING ##
+k = 5347
+N = 3711779 bytes
+sizeof(int) = 4 bytes
+CLOCK = 0,066784 TIME = 2,000000
+## SACAK_lcp ##
+CLOCK = 1,432826 TIME = 1,000000
+## SUS_T ##
+CLOCK = 0,172637 TIME = 0,000000
+malloc_count ### exiting, total: 68.576.162, peak: 48.257.237, current: 4.096
+

@@ -57,12 +57,12 @@
  *  @param n	string length
  *  @return -1 if an error occured, otherwise the depth of the recursive calls.
  */
-int sacak(unsigned char *s, uint_t *SA, uint_t n);
+int_t sacak(unsigned char *s, uint_t *SA, uint_t n);
 
 /** @brief computes the suffix array of string s[0..n-1]
  *  @param k	alphabet size
  */
-int sacak_int(int_t *s, uint_t *SA, uint_t n, uint_t k);
+int_t sacak_int(int_t *s, uint_t *SA, uint_t n, uint_t k);
 
 /** @brief computes the suffix and LCP arrays of string s[0..n-1]
  *
@@ -72,11 +72,11 @@ int sacak_int(int_t *s, uint_t *SA, uint_t n, uint_t k);
  *  @param n	string length
  *  @return -1 if an error occured, otherwise the depth of the recursive calls.
  */
-int sacak_lcp(unsigned char *s, uint_t *SA, int_t* LCP, uint_t n);
+int_t sacak_lcp(unsigned char *s, uint_t *SA, int_t* LCP, uint_t n);
 
 /** @brief computes the suffix and LCP arrays of string s[0..n-1]
  *  @param k	alphabet size
  */
-int sacak_lcp_int(int_t *s, uint_t *SA, int_t* LCP, uint_t n, uint_t k);
+int_t sacak_lcp_int(int_t *s, uint_t *SA, int_t* LCP, uint_t n, uint_t k);
 
 #endif

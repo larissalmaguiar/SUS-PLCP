@@ -51,7 +51,7 @@ int_t print_char(char* A, int_t n){
 return 0;
 }
 /**********************************************************************/
-unsigned char* cat_char(unsigned char** R, int k, size_t *n){
+unsigned char* cat_char(unsigned char** R, int_t k, size_t *n){
 
 	(*n)++; //add 0 at the end
 

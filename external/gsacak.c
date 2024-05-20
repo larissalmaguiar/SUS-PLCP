@@ -27,7 +27,7 @@ typedef struct _pair{
   int_t lcp;
 } t_pair_k;
 
-int compare_k (const void * a, const void * b){
+int_t compare_k (const void * a, const void * b){
   if(*(const uint_t *)a < *(const uint_t *)b) return -1;
   if(*(const uint_t *)a > *(const uint_t *)b) return 1;
 return 0;
@@ -43,7 +43,7 @@ void stack_push_k(t_pair_k* STACK, int_t *top, uint_t idx, int_t lcp){
 
 void compute_lcp_phi_sparse(int_t *s, uint_t *SA1, 
   uint_t *RA, int_t *LCP, int_t *PLCP,
-  uint_t n1, int cs, uint_t separator) {
+  uint_t n1, int_t cs, uint_t separator) {
 
   uint_t i;
 
@@ -77,7 +77,7 @@ void compute_lcp_phi_sparse(int_t *s, uint_t *SA1,
 
 void getBuckets_k(int_t *s, 
   uint_t *bkt, uint_t n,
-  unsigned int K, int end, int cs) { 
+  unsigned int K, int_t end, int_t cs) { 
   uint_t i, sum=0;
   
   // clear all buckets .
@@ -96,7 +96,7 @@ void getBuckets_k(int_t *s,
 
 void putSuffix0(uint_t *SA, 
   int_t *s, uint_t *bkt, 
-  uint_t n, unsigned int K, int_t n1, int cs) {
+  uint_t n, unsigned int K, int_t n1, int_t cs) {
   uint_t i, j;
 
   // find the end of each bucket.
@@ -112,7 +112,7 @@ void putSuffix0(uint_t *SA,
 
 void putSuffix0_generalized(uint_t *SA, 
   uint_t *s, uint_t *bkt, 
-  uint_t n, unsigned int K, int_t n1, int cs, uint_t separator) {
+  uint_t n, unsigned int K, int_t n1, int_t cs, uint_t separator) {
   uint_t i, j;
 
   // find the end of each bucket.
@@ -134,7 +134,7 @@ void putSuffix0_generalized(uint_t *SA,
 
 void putSuffix0_generalized_LCP(uint_t *SA, int_t *LCP,
   uint_t *s, uint_t *bkt, 
-  uint_t n, unsigned int K, int_t n1, int cs, uint_t separator) {
+  uint_t n, unsigned int K, int_t n1, int_t cs, uint_t separator) {
   uint_t i, j;
   int_t l;
 
@@ -160,7 +160,7 @@ void putSuffix0_generalized_LCP(uint_t *SA, int_t *LCP,
 
 void putSuffix0_generalized_DA(uint_t *SA, int_da *DA,
   uint_t *s, uint_t *bkt, 
-  uint_t n, unsigned int K, int_t n1, int cs, uint_t separator) {
+  uint_t n, unsigned int K, int_t n1, int_t cs, uint_t separator) {
   uint_t i, j;
 
   // find the end of each bucket.
@@ -185,7 +185,7 @@ void putSuffix0_generalized_DA(uint_t *SA, int_da *DA,
 
 void putSuffix0_generalized_LCP_DA(uint_t *SA, int_t *LCP,  int_da *DA, 
   uint_t *s, uint_t *bkt, 
-  uint_t n, unsigned int K, int_t n1, int cs, uint_t separator) {
+  uint_t n, unsigned int K, int_t n1, int_t cs, uint_t separator) {
   uint_t i, j;
   int_t l;
 
@@ -214,7 +214,7 @@ void putSuffix0_generalized_LCP_DA(uint_t *SA, int_t *LCP,  int_da *DA,
 
 void induceSAl0(uint_t *SA,
   int_t *s, uint_t *bkt,
-  uint_t n, unsigned int K, int_t suffix, int cs) {
+  uint_t n, unsigned int K, int_t suffix, int_t cs) {
   uint_t i, j;
 
   // find the head of each bucket.
@@ -234,7 +234,7 @@ void induceSAl0(uint_t *SA,
 
 void induceSAs0(uint_t *SA,
   int_t	*s, uint_t *bkt,
-  uint_t n, unsigned int K, int_t suffix, int cs) {
+  uint_t n, unsigned int K, int_t suffix, int_t cs) {
   uint_t i, j;
 
   // find the end of each bucket.
@@ -254,7 +254,7 @@ void induceSAs0(uint_t *SA,
 
 void induceSAl0_generalized(uint_t *SA,
   uint_t *s, uint_t *bkt,
-  uint_t n, unsigned int K, int_t suffix, int cs, uint_t separator) {
+  uint_t n, unsigned int K, int_t suffix, int_t cs, uint_t separator) {
   uint_t i, j;
 
   // find the head of each bucket.
@@ -274,7 +274,7 @@ void induceSAl0_generalized(uint_t *SA,
 
 void induceSAs0_generalized(uint_t *SA,
   uint_t *s, uint_t *bkt,
-  uint_t n, uint_t K, int_t suffix, int cs, uint_t separator) {
+  uint_t n, uint_t K, int_t suffix, int_t cs, uint_t separator) {
   uint_t i, j;
 
   // find the end of each bucket.
@@ -295,7 +295,7 @@ void induceSAs0_generalized(uint_t *SA,
 
 void induceSAl0_generalized_LCP(uint_t *SA, int_t *LCP,
   uint_t *s, uint_t *bkt,
-  uint_t n, unsigned int K, int cs, uint_t separator) {
+  uint_t n, unsigned int K, int_t cs, uint_t separator) {
   uint_t i, j;
 
   for(i=0;i<K;i++)
@@ -432,7 +432,7 @@ void induceSAl0_generalized_LCP(uint_t *SA, int_t *LCP,
 
 void induceSAs0_generalized_LCP(uint_t *SA, int_t* LCP,
   uint_t *s, uint_t *bkt,
-  uint_t n, uint_t K, int cs, uint_t separator) {
+  uint_t n, uint_t K, int_t cs, uint_t separator) {
   uint_t i, j;
 
   // find the end of each bucket.
@@ -550,7 +550,7 @@ void induceSAs0_generalized_LCP(uint_t *SA, int_t* LCP,
 
 void induceSAl0_generalized_DA(uint_t *SA, int_da* DA,
   uint_t *s, uint_t *bkt,
-  uint_t n, unsigned int K, int cs, uint_t separator) {
+  uint_t n, unsigned int K, int_t cs, uint_t separator) {
   uint_t i, j;
 
   // find the head of each bucket.
@@ -571,7 +571,7 @@ void induceSAl0_generalized_DA(uint_t *SA, int_da* DA,
 
 void induceSAs0_generalized_DA(uint_t *SA, int_da* DA,
   uint_t *s, uint_t *bkt,
-  uint_t n, uint_t K, int cs, uint_t separator) {
+  uint_t n, uint_t K, int_t cs, uint_t separator) {
   uint_t i, j;
 
   // find the end of each bucket.
@@ -593,7 +593,7 @@ void induceSAs0_generalized_DA(uint_t *SA, int_da* DA,
 
 void induceSAl0_generalized_LCP_DA(uint_t *SA, int_t *LCP, int_da *DA,
   uint_t *s, uint_t *bkt,
-  uint_t n, unsigned int K, int cs, uint_t separator) {
+  uint_t n, unsigned int K, int_t cs, uint_t separator) {
   uint_t i, j;
 
   for(i=0;i<K;i++)
@@ -730,7 +730,7 @@ void induceSAl0_generalized_LCP_DA(uint_t *SA, int_t *LCP, int_da *DA,
 
 void induceSAs0_generalized_LCP_DA(uint_t *SA, int_t* LCP, int_da* DA,
   uint_t *s, uint_t *bkt,
-  uint_t n, uint_t K, int cs, uint_t separator) {
+  uint_t n, uint_t K, int_t cs, uint_t separator) {
   uint_t i, j;
 
   // find the end of each bucket.
@@ -850,7 +850,7 @@ void induceSAs0_generalized_LCP_DA(uint_t *SA, int_t* LCP, int_da* DA,
 
 void putSubstr0(uint_t *SA,
   int_t *s, uint_t *bkt,
-  uint_t n, unsigned int K, int cs) {
+  uint_t n, unsigned int K, int_t cs) {
   uint_t i, cur_t, succ_t;
 
   // find the end of each bucket.
@@ -875,7 +875,7 @@ void putSubstr0(uint_t *SA,
 /*****************************************************************************/
 void putSubstr0_generalized(uint_t *SA,
   uint_t *s, uint_t *bkt,
-  uint_t n, unsigned int K, int cs, uint_t separator) {
+  uint_t n, unsigned int K, int_t cs, uint_t separator) {
   uint_t i, cur_t, succ_t;
 
   // find the end of each bucket.
@@ -911,7 +911,7 @@ void putSubstr0_generalized(uint_t *SA,
 }
 /*****************************************************************************/
 
-void putSuffix1(int_t *SA, int_t *s, int_t n1, int cs) {
+void putSuffix1(int_t *SA, int_t *s, int_t n1, int_t cs) {
   int_t i, j, pos=n1, cur, pre=-1;
   
   for(i=n1-1; i>0; i--) {
@@ -925,7 +925,7 @@ void putSuffix1(int_t *SA, int_t *s, int_t n1, int cs) {
 }
 
 void induceSAl1(int_t *SA, int_t *s, 
-  int_t n, int_t suffix, int cs) {
+  int_t n, int_t suffix, int_t cs) {
   int_t h, i, j, step=1;
   
   for(i=0; i<n; i+=step) {
@@ -1000,7 +1000,7 @@ void induceSAl1(int_t *SA, int_t *s,
 }
 
 void induceSAs1(int_t *SA, int_t *s, 
-  int_t n, int_t suffix, int cs) {
+  int_t n, int_t suffix, int_t cs) {
   int_t h, i, j, step=1;
   
   for(i=n-1; i>0; i-=step) {
@@ -1073,7 +1073,7 @@ void induceSAs1(int_t *SA, int_t *s,
     }
 }
 
-void putSubstr1(int_t *SA, int_t *s, int_t n, int cs) {
+void putSubstr1(int_t *SA, int_t *s, int_t n, int_t cs) {
   int_t h, i, j;
 
   for(i=0; i<n; i++) SA[i]=EMPTY_k;
@@ -1144,7 +1144,7 @@ void putSubstr1(int_t *SA, int_t *s, int_t n, int cs) {
 }
 
 uint_t getLengthOfLMS(int_t	*s, 
-  uint_t n, int level, uint_t x, int cs) {
+  uint_t n, int_t level, uint_t x, int_t cs) {
   if(x==n-1) return 1;  
   
   uint_t dist=0, i=1;  
@@ -1163,7 +1163,7 @@ uint_t getLengthOfLMS(int_t	*s,
 
 uint_t nameSubstr(uint_t *SA, 
   int_t *s, uint_t *s1, uint_t n, 
-  uint_t m, uint_t n1, int level, int cs) {
+  uint_t m, uint_t n1, int_t level, int_t cs) {
   uint_t i, j, cur_t, succ_t;
 
   // init the name array buffer
@@ -1173,7 +1173,7 @@ uint_t nameSubstr(uint_t *SA,
   uint_t name=0, name_ctr=0;
   uint_t pre_pos=n-1, pre_len=0;
   for(i=0; i<n1; i++) {
-    int diff=false;
+    int_t diff=false;
     uint_t len, pos=SA[i];
 
     uint_t d;
@@ -1222,7 +1222,7 @@ uint_t nameSubstr(uint_t *SA,
 
 uint_t nameSubstr_generalized(uint_t *SA, 
   uint_t *s, uint_t *s1, uint_t n, 
-  uint_t m, uint_t n1, int level, int cs, uint_t separator) {
+  uint_t m, uint_t n1, int_t level, int_t cs, uint_t separator) {
   uint_t i, j, cur_t, succ_t;
 
   // init the name array buffer
@@ -1232,7 +1232,7 @@ uint_t nameSubstr_generalized(uint_t *SA,
   uint_t name=0, name_ctr=0;
   uint_t pre_pos=n-1, pre_len=0;
   for(i=0; i<n1; i++) {
-    int diff=false;
+    int_t diff=false;
     uint_t len, pos=SA[i];
 
     uint_t d;  
@@ -1282,7 +1282,7 @@ uint_t nameSubstr_generalized(uint_t *SA,
 
 uint_t nameSubstr_generalized_LCP(uint_t *SA, int_t *LCP,
   uint_t *s, uint_t *s1, uint_t n, 
-  uint_t m, uint_t n1, int level, int cs, uint_t separator) {
+  uint_t m, uint_t n1, int_t level, int_t cs, uint_t separator) {
   uint_t i, j, cur_t, succ_t;
 
   // init the name array buffer
@@ -1292,7 +1292,7 @@ uint_t nameSubstr_generalized_LCP(uint_t *SA, int_t *LCP,
   uint_t name=0, name_ctr=0;
   uint_t pre_pos=n-1, pre_len=0;
   for(i=0; i<n1; i++) {
-    int diff=false;
+    int_t diff=false;
     uint_t len, pos=SA[i];
 
     uint_t d;  
@@ -1346,7 +1346,7 @@ uint_t nameSubstr_generalized_LCP(uint_t *SA, int_t *LCP,
 void getSAlms(uint_t *SA, 
   int_t *s, 
   uint_t *s1, uint_t n, 
-  uint_t n1, int level, int cs) {
+  uint_t n1, int_t level, int_t cs) {
   uint_t i, j, cur_t, succ_t;
 
   j=n1-1; s1[j--]=n-1;
@@ -1363,7 +1363,7 @@ void getSAlms(uint_t *SA,
 void getSAlms_DA(uint_t *SA, int_da* DA,
   int_t *s, 
   uint_t *s1, uint_t n, 
-  uint_t n1, int level, int cs, uint_t separator) {
+  uint_t n1, int_t level, int_t cs, uint_t separator) {
   uint_t i, j, cur_t, succ_t;
 
 /**/
@@ -1395,7 +1395,7 @@ void getSAlms_DA(uint_t *SA, int_da* DA,
 
 int_t SACA_K(int_t	*s, uint_t *SA,
   uint_t n, unsigned int K,
-  uint_t m, int cs, int level) {
+  uint_t m, int_t cs, int_t level) {
   uint_t i;
   uint_t *bkt=NULL;
   
@@ -1528,7 +1528,7 @@ return depth;
 
 int_t gSACA_K(uint_t *s, uint_t *SA,
   uint_t n, unsigned int K,
-  int cs, uint_t separator, int level) {
+  int_t cs, uint_t separator, int_t level) {
   uint_t i;
   uint_t *bkt=NULL;
   uint_t m=n;
@@ -1647,7 +1647,7 @@ return depth;
 
 int_t gSACA_K_LCP(uint_t *s, uint_t *SA, int_t *LCP,
   uint_t n, unsigned int K,
-  int cs, uint_t separator, int level) {
+  int_t cs, uint_t separator, int_t level) {
   uint_t i;
   uint_t *bkt=NULL;
   uint_t m=n;
@@ -1931,7 +1931,7 @@ return depth;
 
 int_t gSACA_K_DA(uint_t *s, uint_t *SA, int_da *DA,
   uint_t n, unsigned int K,
-  int cs, uint_t separator, int level) {
+  int_t cs, uint_t separator, int_t level) {
   uint_t i;
   uint_t *bkt=NULL;
   uint_t m=n;
@@ -2184,7 +2184,7 @@ return depth;
 
 int_t gSACA_K_LCP_DA(uint_t *s, uint_t *SA, int_t *LCP, int_da *DA,
   uint_t n, unsigned int K,
-  int cs, uint_t separator, int level) {
+  int_t cs, uint_t separator, int_t level) {
   uint_t i;
   uint_t *bkt=NULL;
   uint_t m=n;
@@ -2490,17 +2490,17 @@ return depth;
 /*****************************************************************************/
 
 
-int sacak(unsigned char *s, uint_t *SA, uint_t n){
+int_t sacak(unsigned char *s, uint_t *SA, uint_t n){
 	if((s == NULL) || (SA == NULL) || (n < 0)) return -1;
 	return SACA_K((int_t*)s, (uint_t*)SA, n, 256, n, sizeof(char), 0);
 }
 
-int sacak_int(int_text *s, uint_t *SA, uint_t n, uint_t k){
+int_t sacak_int(int_text *s, uint_t *SA, uint_t n, uint_t k){
 	if((s == NULL) || (SA == NULL) || (n < 0)) return -1;
 	return SACA_K((int_t*)s, (uint_t*)SA, n, k, n, sizeof(int_text), 0);
 }
 
-int gsacak(unsigned char *s, uint_t *SA, int_t *LCP, int_da *DA, uint_t n){
+int_t gsacak(unsigned char *s, uint_t *SA, int_t *LCP, int_da *DA, uint_t n){
 
 	if((s == NULL) || (SA == NULL) || (n < 0)) return -1;
 	int_t i;
@@ -2522,7 +2522,7 @@ int gsacak(unsigned char *s, uint_t *SA, int_t *LCP, int_da *DA, uint_t n){
 		return gSACA_K_LCP_DA((uint_t*)s, SA, LCP, DA, n, 256, sizeof(char), 1, 0);
 }
 
-int gsacak_int(int_text *s, uint_t *SA, int_t *LCP, int_da *DA, uint_t n, uint_t k){
+int_t gsacak_int(int_text *s, uint_t *SA, int_t *LCP, int_da *DA, uint_t n, uint_t k){
 
 	if((s == NULL) || (SA == NULL) || (n < 0)) return -1;
 	int_t i;

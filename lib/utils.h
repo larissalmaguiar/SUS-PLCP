@@ -65,6 +65,6 @@ int_t print_char(char* A, int_t n);
 
 /**********************************************************************/
 
-unsigned char* cat_char(unsigned char** R, int k, size_t *n);
+unsigned char* cat_char(unsigned char** R, int_t k, size_t *n);
 
 #endif
