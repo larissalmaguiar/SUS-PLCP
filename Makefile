@@ -14,7 +14,7 @@ LIBOBJ = \
 
 INPUT = dataset/example.txt
 ALG = 1
-
+M64 = 0
 ####
 
 all: main
