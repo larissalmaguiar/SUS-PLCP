@@ -20,7 +20,7 @@
 #define END_MARKER '$'
 
 #ifndef M64
-	#define M64 0
+	#define M64 1
 #endif
 
 #ifndef DEBUG
