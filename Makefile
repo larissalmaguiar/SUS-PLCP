@@ -1,7 +1,9 @@
 CC = gcc
 CFLAGS += -Wall 
 #CFLAGS += -g -O0
-CFLAGS += -D_FILE_OFFSET_BITS=64 -m64 -O3 -fomit-frame-pointer -Wno-char-subscripts 
+M64 = 0
+
+CFLAGS += -D_FILE_OFFSET_BITS=64 -DM64=$(M64) -m64 -O3 -fomit-frame-pointer -Wno-char-subscripts 
 
 LFLAGS = -lm -lrt -ldl
 
@@ -14,6 +16,7 @@ LIBOBJ = \
 
 INPUT = dataset/example.txt
 ALG = 1
+
 
 ####
 
