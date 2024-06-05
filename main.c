@@ -3,7 +3,7 @@
  *
  * Authors: Larissa M. Aguiar and Felipe A. Louza
  * contact: louza@ufu.br
- * 16/08/2021
+ * 05/06/2024
  *
  */
 
@@ -34,8 +34,7 @@ int main(int argc, char *argv[]){
   extern char *optarg;
   extern int optind, opterr, optopt;
   char *c_file=NULL;
-  printf("%d", M64);
-  int_t c, alg = 0, comp = 0, pri = 0, time=0;
+  int c, alg = 0, comp = 0, pri = 0, time=0;
   while ((c = getopt(argc, argv, "A:kpct")) != -1){
     switch (c){
       case 'A':
@@ -58,7 +57,6 @@ int main(int argc, char *argv[]){
 
   if(optind+1==argc) {
     c_file=argv[optind++];
-    printf("%s",c_file);
   }
 
   //TODO: colocar em uma função
@@ -69,7 +67,6 @@ int main(int argc, char *argv[]){
 
   if(time) time_start(&t_start, &c_start);
   printf("## PREPROCESSING ##\n");
-  printf("%d", M64);
   int_t k=0;
   size_t n=0;
   unsigned char **R = (unsigned char**) file_load_multiple(c_file, &k, &n);
@@ -84,14 +81,16 @@ int main(int argc, char *argv[]){
     // for(size_t i=0; i<n; i++) printf("[%d]", T[i]);
     // printf("\n");
 
-  printf("k = %d\n", k);
+  printf("k = %" INT_T_FORMAT "\n", k);
   printf("N = %zu bytes\n", n);
   printf("sizeof(int) = %zu bytes\n", sizeof(int_t)); 
 
-  //free memoryPREP
+  //free memory
+ if (*R!=NULL){
   for(int_t i=0; i<k; i++)
     free(R[i]);
   free(R);
+ }
 
   if(time) fprintf(stderr,"%.6lf\n", time_stop(t_start, c_start));
 
@@ -266,12 +265,12 @@ int main(int argc, char *argv[]){
      for(int_t i=0; i<=n; i++)
     {
       if(T[i]!=1 && T[i]!=0){
-      printf("SUS[%d]: \t %d\t T[%d]:\t %c\n", i, SUS[i], i, T[i]-1);
+      printf("SUS[%" INT_T_FORMAT "]: \t %" INT_T_FORMAT "\t T[%" INT_T_FORMAT "]:\t %c\n", i, SUS[i], i, T[i]-1);
       }
       else if(T[i]==1)
-        printf("SUS[%d]: \t %d\t T[%d]:\t %d\n", i, SUS[i], i, (int)1);
+        printf("SUS[%"INT_T_FORMAT"]: \t %"INT_T_FORMAT"\t T[%"INT_T_FORMAT"]:\t %"INT_T_FORMAT"\n", i, SUS[i], i, (int)1);
       else if(T[i]==0)
-        printf("SUS[%d]: \t %d\t T[%d]:\t %d\n", i, SUS[i], i, (int)0);
+        printf("SUS[%"INT_T_FORMAT"]: \t %"INT_T_FORMAT"\t T[%"INT_T_FORMAT"]:\t %"INT_T_FORMAT"\n", i, SUS[i], i, (int)0);
     }
   }
   //VALIDATION

@@ -36,6 +36,7 @@
 	#define U_MAX 	 UINT64_MAX
 	#define I_MAX 	 INT64_MAX
 	#define I_MIN 	 INT64_MIN
+	#define INT_T_FORMAT PRId64
 #else
 	typedef int32_t  int_t;
 	typedef uint32_t uint_t;
@@ -43,6 +44,7 @@
 	#define U_MAX 	 UINT32_MAX
 	#define I_MAX	 INT32_MAX
 	#define I_MIN	 INT32_MIN
+	#define INT_T_FORMAT PRId32
 #endif
 
 typedef uint32_t int_text;
