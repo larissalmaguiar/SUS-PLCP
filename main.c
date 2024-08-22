@@ -81,7 +81,7 @@ int main(int argc, char *argv[]){
     // for(size_t i=0; i<n; i++) printf("[%d]", T[i]);
     // printf("\n");
 
-  printf("k = %" INT_T_FORMAT "\n", k);
+  printf("k = %" PRIdN "\n", k);
   printf("N = %zu bytes\n", n);
   printf("sizeof(int) = %zu bytes\n", sizeof(int_t)); 
 
@@ -265,12 +265,12 @@ int main(int argc, char *argv[]){
      for(int_t i=0; i<=n; i++)
     {
       if(T[i]!=1 && T[i]!=0){
-      printf("SUS[%" INT_T_FORMAT "]: \t %" INT_T_FORMAT "\t T[%" INT_T_FORMAT "]:\t %c\n", i, SUS[i], i, T[i]-1);
+      printf("SUS[%" PRIdN "]: \t %" PRIdN "\t T[%" PRIdN "]:\t %c\n", i, SUS[i], i, T[i]-1);
       }
       else if(T[i]==1)
-        printf("SUS[%"INT_T_FORMAT"]: \t %"INT_T_FORMAT"\t T[%"INT_T_FORMAT"]:\t %"INT_T_FORMAT"\n", i, SUS[i], i, (int)1);
+        printf("SUS[%"PRIdN"]: \t %"PRIdN"\t T[%"PRIdN"]:\t %d\n", i, SUS[i], i, 1);
       else if(T[i]==0)
-        printf("SUS[%"INT_T_FORMAT"]: \t %"INT_T_FORMAT"\t T[%"INT_T_FORMAT"]:\t %"INT_T_FORMAT"\n", i, SUS[i], i, (int)0);
+        printf("SUS[%"PRIdN"]: \t %"PRIdN"\t T[%"PRIdN"]:\t %d\n", i, SUS[i], i, 0);
     }
   }
   //VALIDATION

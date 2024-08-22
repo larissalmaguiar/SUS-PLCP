@@ -8,7 +8,7 @@ void print(uint_t *A, int_t *B, unsigned char *T, int_t n)
     printf("i\tA\tB\tSuffixes\n");
     for (int_t i = 0; i < n; ++i)
     {
-        printf("%d\t%d\t%d\t", i, A[i], B[i]);
+        printf("%" PRIdN "\t%" PRIdN "\t%" PRIdN "\t", i, A[i], B[i]);
         for (int_t j = A[i]; j < n; ++j)
         {
           if(T[j]==0) printf("#");
@@ -27,7 +27,7 @@ void print_sus(uint_t *A, int_t *B, unsigned char *T, int_t n)
     printf("i\tA\tB\tSuffixes\n");
     for (int_t i = 0; i <=n; ++i)
     {
-        printf("%d\t%d\t%d\t", i, A[i], B[A[i]]);
+        printf("%" PRIdN "\t%" PRIdN "\t%" PRIdN "\t", i, A[i], B[A[i]]);
         for (int_t j = A[i]; j < n; ++j)
         {
           if(T[j]==0) printf("#");
@@ -47,7 +47,7 @@ bool equal(int_t *v1, int_t *v2, int_t tam)
     {
         if (v1[i] != v2[i])
         {
-            printf("SUS and SUST are different in %d SUS: %d \t SUS_T: %d\n", i, v1[i], v2[i]);
+            printf("SUS and SUST are different in %" PRIdN " SUS: %" PRIdN " \t SUS_T: %" PRIdN "\n", i, v1[i], v2[i]);
             return false;
         }
     }
@@ -229,7 +229,7 @@ void SUS2_13(int_t *SUS, int_t n, int_t *PLCP, int_t *PHI, unsigned char *T)
 void SUS_1(int_t sa_last, int_t n, int_t *PLCP, int_t *PHI, unsigned char *T)
 {
 
-    int_t k, cur, aux, i, cont=0;  
+    int_t k, cur, aux, i;
     PHI[n]=sa_last; 
     k=PHI[0];// sufixo que antecede o sufixo i 
     aux=PLCP[k];

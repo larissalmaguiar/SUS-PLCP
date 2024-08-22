@@ -27,7 +27,7 @@ typedef struct _pair{
   int_t lcp;
 } t_pair_k;
 
-int_t compare_k (const void * a, const void * b){
+int compare_k (const void * a, const void * b){
   if(*(const uint_t *)a < *(const uint_t *)b) return -1;
   if(*(const uint_t *)a > *(const uint_t *)b) return 1;
 return 0;
